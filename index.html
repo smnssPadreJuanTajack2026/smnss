@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Biblioteca Padre Juan Tajack
+</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f4f8;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #ccc;
+box-sizing:border-box;
+}
+
+button{
+background:#004f77;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#006699;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+background:white;
+}
+
+table th{
+background:#004f77;
+color:white;
+}
+
+table th, table td{
+border:1px solid #ccc;
+padding:10px;
+text-align:center;
+}
+
+footer{
+text-align:center;
+margin-top:30px;
+color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>
+Registrar Usuario
+</h2>
+
+<input type="text"
+id="nombre"
+placeholder="Nombre completo">
+
+<input type="text"
+id="identidad"
+placeholder="Número de identidad">
+
+<select id="etapa">
+
+<option value="">
+Seleccione etapa
+</option>
+
+<option value="Configuradora">
+Configuradora
+</option>
+
+<option value="Discipular">
+Discipular
+</option>
+
+</select>
+
+<button onclick="registrarUsuario()">
+Guardar Usuario
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+Nuevo Préstamo
+</h2>
+
+<input type="text"
+id="codigo"
+placeholder="Código del libro">
+
+<input type="text"
+id="libro"
+placeholder="Nombre del libro">
+
+<select id="usuario"></select>
+
+<input type="date"
+id="fecha">
+
+<button onclick="registrarPrestamo()">
+Registrar Préstamo
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+Libros Prestados
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Código</th>
+<th>Libro</th>
+<th>Usuario</th>
+<th>Fecha entrega</th>
+<th>Estado</th>
+</tr>
+
+</thead>
+
+<tbody id="tabla"></tbody>
+
+</table>
+
+</div>
+
+<footer>
+Biblioteca Padre Juan Tajack
+</footer>
+
+<script>
+
+const SUPABASE_URL =
+"https://wizrwignblrgkhyvtlyl.supabase.co/rest/v1/";
+
+const SUPABASE_KEY =
+"sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ";
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+async function registrarUsuario(){
+
+let nombre =
+document.getElementById("nombre").value;
+
+let identidad =
+document.getElementById("identidad").value;
+
+let etapa =
+document.getElementById("etapa").value;
+
+if(
+nombre === "" ||
+identidad === "" ||
+etapa === ""
+){
+alert("Complete todos los campos");
+return;
+}
+
+await supabase
+.from("usuarios")
+.insert([{
+nombre,
+identidad,
+etapa
+}]);
+
+alert("Usuario registrado");
+
+document.getElementById("nombre").value="";
+document.getElementById("identidad").value="";
+document.getElementById("etapa").value="";
+
+cargarUsuarios();
+
+}
+
+async function cargarUsuarios(){
+
+let { data } =
+await supabase
+.from("usuarios")
+.select("*")
+.order("nombre");
+
+let select =
+document.getElementById("usuario");
+
+select.innerHTML="";
+
+data.forEach(u=>{
+
+select.innerHTML +=
+`<option>${u.nombre}</option>`;
+
+});
+
+}
+
+async function registrarPrestamo(){
+
+let codigo =
+document.getElementById("codigo").value;
+
+let libro =
+document.getElementById("libro").value;
+
+let usuario =
+document.getElementById("usuario").value;
+
+let fecha =
+document.getElementById("fecha").value;
+
+await supabase
+.from("prestamos")
+.insert([{
+codigo,
+libro,
+usuario,
+fecha_prestamo:fecha,
+devuelto:false
+}]);
+
+alert("Préstamo registrado");
+
+document.getElementById("codigo").value="";
+document.getElementById("libro").value="";
+document.getElementById("fecha").value="";
+
+cargarPrestamos();
+
+}
+
+async function cargarPrestamos(){
+
+let { data } =
+await supabase
+.from("prestamos")
+.select("*")
+.order("id", { ascending:false });
+
+let tabla =
+document.getElementById("tabla");
+
+tabla.innerHTML="";
+
+data.forEach(p=>{
+
+if(!p.devuelto){
+
+let hoy =
+new Date();
+
+let entrega =
+new Date(p.fecha_prestamo);
+
+let color = "";
+
+hoy.setHours(0,0,0,0);
+entrega.setHours(0,0,0,0);
+
+if(entrega < hoy){
+
+color = "#ffb3b3";
+
+}else if(
+entrega.getTime() === hoy.getTime()
+){
+
+color = "#fff0a6";
+
+}else{
+
+color = "white";
+
+}
+
+tabla.innerHTML += `
+
+<tr style="background:${color}">
+
+<td>${p.codigo}</td>
+
+<td>${p.libro}</td>
+
+<td>${p.usuario}</td>
+
+<td>${p.fecha_prestamo}</td>
+
+<td>
+
+${
+entrega < hoy
+? "Vencido"
+:
+entrega.getTime() === hoy.getTime()
+? "Entrega hoy"
+:
+"En tiempo"
+}
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+}
+
+cargarUsuarios();
+
+cargarPrestamos();
+
+</script>
+
+</body>
+</html>
