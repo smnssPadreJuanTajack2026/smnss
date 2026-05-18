@@ -10,43 +10,57 @@
 
 <style>
 
-body{
-font-family:Arial;
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial,sans-serif;
 background:#f2f4f8;
 }
 
 .header{
-background:#003b5c;
+background:linear-gradient(90deg,#001f3f,#004f77);
 color:white;
 padding:20px;
 text-align:center;
-font-size:24px;
+position:relative;
 }
 
-.container{
+.menu-btn{
+position:absolute;
+left:20px;
+top:20px;
+font-size:30px;
+cursor:pointer;
+}
+
+.main{
 display:flex;
 }
 
-.menu{
+.sidebar{
 width:220px;
-background:#01263d;
+background:#012b46;
 min-height:100vh;
+transition:0.3s;
 }
 
-.menu button{
-width:100%;
-padding:15px;
-border:none;
-background:none;
+.sidebar.oculto{
+margin-left:-220px;
+}
+
+.menu-item{
 color:white;
-font-size:16px;
+padding:18px;
+border-bottom:1px solid rgba(255,255,255,0.1);
 cursor:pointer;
-text-align:left;
 }
 
-.menu button:hover{
-background:#014b75;
+.menu-item:hover{
+background:#014d7a;
 }
 
 .content{
@@ -57,28 +71,57 @@ padding:20px;
 .card{
 background:white;
 padding:20px;
-border-radius:10px;
-margin-bottom:20px;
+border-radius:12px;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
+margin-bottom:20px;
 }
 
-input,select,button{
+.card h2{
+margin-bottom:15px;
+color:#004f77;
+}
+
+input,
+select,
+button{
 width:100%;
 padding:12px;
 margin-top:10px;
+border-radius:6px;
+border:1px solid #ccc;
 }
 
 button{
-background:#004f77;
+background:#006b9f;
 color:white;
 border:none;
+font-weight:bold;
 cursor:pointer;
+}
+
+button:hover{
+background:#004f77;
+}
+
+.btn-editar{
+background:#ff9800;
+margin-top:10px;
+}
+
+.btn-eliminar{
+background:#c62828;
+margin-top:10px;
+}
+
+.btn-devolver{
+background:#2e7d32;
+margin-top:10px;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:20px;
+margin-top:15px;
 }
 
 table th{
@@ -88,29 +131,56 @@ padding:10px;
 }
 
 table td{
+border:1px solid #ddd;
 padding:10px;
-border:1px solid #ccc;
 text-align:center;
 }
 
-.estado-normal{
-background:#d6ecff;
-}
-
-.estado-alerta{
-background:#fff3b0;
-}
-
-.estado-vencido{
-background:#ffcccc;
-}
-
-.seccion{
+.panel{
 display:none;
 }
 
-.activa{
+.panel.active{
 display:block;
+}
+
+.lista-busqueda{
+border:1px solid #ccc;
+background:white;
+border-radius:6px;
+max-height:150px;
+overflow-y:auto;
+display:none;
+margin-top:5px;
+}
+
+.item-usuario{
+padding:10px;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.item-usuario:hover{
+background:#eef7ff;
+}
+
+.estado-normal{
+background:#d6e8ff;
+}
+
+.estado-alerta{
+background:#fff0b3;
+}
+
+.estado-vencido{
+background:#ffd6d6;
+}
+
+.info-usuario{
+background:#eef7ff;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
 }
 
 </style>
@@ -119,39 +189,53 @@ display:block;
 <body>
 
 <div class="header">
-Biblioteca Padre Juan Tajack
+
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<h1>Biblioteca Padre Juan Tajack</h1>
+
+<h3>Seminario Mayor Nuestra Señora de Suyapa</h3>
+
 </div>
 
-<div class="container">
+<div class="main">
 
-<div class="menu">
+<div class="sidebar" id="sidebar">
 
-<button onclick="mostrar('inicio')">
+<div class="menu-item" onclick="mostrarPanel('inicio')">
 Inicio
-</button>
+</div>
 
-<button onclick="mostrar('prestamos')">
+<div class="menu-item" onclick="mostrarPanel('usuarios')">
+Usuarios
+</div>
+
+<div class="menu-item" onclick="mostrarPanel('prestamos')">
 Préstamos
-</button>
+</div>
 
 </div>
 
 <div class="content">
 
-<div id="inicio" class="seccion activa">
+<div id="inicio" class="panel active">
 
 <div class="card">
 
-<h2>Registrar Usuario</h2>
+<h2>Registro de Usuario</h2>
 
-<input type="text" id="nombre" placeholder="Nombre">
+<input type="text" id="nombre" placeholder="Nombre completo">
 
-<input type="text" id="identidad" placeholder="Identidad">
+<input type="text" id="identidad" placeholder="Número de identidad">
 
 <select id="etapa">
+
 <option value="">Seleccione etapa</option>
-<option>Configuradora</option>
-<option>Discipular</option>
+
+<option value="Configuradora">Configuradora</option>
+
+<option value="Discipular">Discipular</option>
+
 </select>
 
 <button onclick="registrarUsuario()">
@@ -162,43 +246,84 @@ Guardar Usuario
 
 </div>
 
-<div id="prestamos" class="seccion">
+<div id="usuarios" class="panel">
+
+<div class="card">
+
+<h2>Usuarios Registrados</h2>
+
+<select id="listaUsuarios" onchange="mostrarInformacionUsuario()">
+
+<option value="">Seleccione usuario</option>
+
+</select>
+
+<div id="informacionUsuario"></div>
+
+</div>
+
+</div>
+
+<div id="prestamos" class="panel">
 
 <div class="card">
 
 <h2>Nuevo Préstamo</h2>
 
-<input type="text" id="codigo" placeholder="Código">
+<input type="text" id="codigo" placeholder="Código del préstamo">
 
-<input type="text" id="libro" placeholder="Libro">
+<input type="text" id="libro" placeholder="Nombre del libro">
 
-<select id="usuario"></select>
+<input
+type="text"
+id="buscarUsuario"
+placeholder="Buscar usuario"
+onkeyup="filtrarUsuarios()"
+>
 
-<input type="date" id="fecha">
+<div class="lista-busqueda" id="listaBusqueda"></div>
+
+<input type="hidden" id="usuarioPrestamo">
+
+<label style="display:block;margin-top:10px;">
+Fecha devolución
+</label>
+
+<input type="date" id="fechaDevolucion">
 
 <button onclick="registrarPrestamo()">
-Guardar Préstamo
+Registrar Préstamo
 </button>
 
 </div>
 
 <div class="card">
 
-<h2>Préstamos</h2>
+<h2>Libros Prestados</h2>
 
 <table>
 
 <thead>
+
 <tr>
+
 <th>Código</th>
+
 <th>Libro</th>
+
 <th>Usuario</th>
-<th>Fecha</th>
+
+<th>Fecha devolución</th>
+
 <th>Estado</th>
+
+<th>Días retraso</th>
+
 </tr>
+
 </thead>
 
-<tbody id="tabla"></tbody>
+<tbody id="tablaPrestamos"></tbody>
 
 </table>
 
@@ -213,26 +338,71 @@ Guardar Préstamo
 <script>
 
 const SUPABASE_URL =
-"https://wizrwignblrgkhyvtlyl.supabase.co";
+'https://wizrwignblrgkhyvtlyl.supabase.co';
 
 const SUPABASE_KEY =
-"sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ";
+'sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ';
 
-const supabase =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
+const supabaseClient =
+supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-function mostrar(id){
+let usuarios = [];
 
-document.querySelectorAll('.seccion')
-.forEach(s=>{
-s.classList.remove('activa');
+let prestamos = [];
+
+window.onload = async function(){
+
+colocarFecha();
+
+await cargarUsuarios();
+
+await cargarPrestamos();
+
+};
+
+function toggleMenu(){
+
+document
+.getElementById('sidebar')
+.classList
+.toggle('oculto');
+
+}
+
+function mostrarPanel(id){
+
+let paneles =
+document.querySelectorAll('.panel');
+
+paneles.forEach(function(panel){
+
+panel.classList.remove('active');
+
 });
 
-document.getElementById(id)
-.classList.add('activa');
+document
+.getElementById(id)
+.classList
+.add('active');
+
+}
+
+function colocarFecha(){
+
+let fecha = new Date();
+
+fecha.setDate(fecha.getDate() + 15);
+
+let year = fecha.getFullYear();
+
+let month =
+String(fecha.getMonth()+1).padStart(2,'0');
+
+let day =
+String(fecha.getDate()).padStart(2,'0');
+
+document.getElementById('fechaDevolucion').value =
+year + '-' + month + '-' + day;
 
 }
 
@@ -247,50 +417,139 @@ document.getElementById('identidad').value;
 let etapa =
 document.getElementById('etapa').value;
 
-if(nombre=='' || identidad=='' || etapa==''){
-alert('Complete todo');
+if(
+nombre === '' ||
+identidad === '' ||
+etapa === ''
+){
+
+alert('Complete todos los campos');
+
 return;
+
 }
 
-let { error } =
-await supabase
+const { error } = await supabaseClient
 .from('usuarios')
-.insert([{
-nombre,
-identidad,
-etapa
-}]);
+.insert([
+{
+nombre:nombre,
+identidad:identidad,
+etapa:etapa
+}
+]);
 
 if(error){
-alert('Error guardando');
+
+alert('Error al guardar');
+
 console.log(error);
+
 return;
+
 }
 
 alert('Usuario guardado');
 
-cargarUsuarios();
+document.getElementById('nombre').value='';
+
+document.getElementById('identidad').value='';
+
+document.getElementById('etapa').value='';
+
+await cargarUsuarios();
 
 }
 
 async function cargarUsuarios(){
 
-let { data } =
-await supabase
+const { data, error } =
+await supabaseClient
 .from('usuarios')
-.select('*');
+.select('*')
+.order('id');
 
-let select =
-document.getElementById('usuario');
+if(error){
 
-select.innerHTML='';
+console.log(error);
 
-data.forEach(u=>{
+return;
 
-select.innerHTML +=
-`<option>${u.nombre}</option>`;
+}
+
+usuarios = data;
+
+let lista =
+document.getElementById('listaUsuarios');
+
+lista.innerHTML =
+'<option value="">Seleccione usuario</option>';
+
+usuarios.forEach(function(usuario,index){
+
+lista.innerHTML +=
+'<option value="'+index+'">'+
+usuario.nombre+
+'</option>';
 
 });
+
+}
+
+function filtrarUsuarios(){
+
+let texto =
+document
+.getElementById('buscarUsuario')
+.value
+.toLowerCase();
+
+let lista =
+document.getElementById('listaBusqueda');
+
+lista.innerHTML='';
+
+if(texto === ''){
+
+lista.style.display='none';
+
+return;
+
+}
+
+usuarios.forEach(function(usuario,index){
+
+if(
+usuario.nombre
+.toLowerCase()
+.includes(texto)
+){
+
+lista.innerHTML +=
+'<div class="item-usuario" onclick="seleccionarUsuario('+index+')">'+
+usuario.nombre+
+' - '+
+usuario.identidad+
+'</div>';
+
+}
+
+});
+
+lista.style.display='block';
+
+}
+
+function seleccionarUsuario(index){
+
+document.getElementById('buscarUsuario').value =
+usuarios[index].nombre;
+
+document.getElementById('usuarioPrestamo').value =
+index;
+
+document.getElementById('listaBusqueda').style.display =
+'none';
 
 }
 
@@ -302,94 +561,204 @@ document.getElementById('codigo').value;
 let libro =
 document.getElementById('libro').value;
 
-let usuario =
-document.getElementById('usuario').value;
+let usuarioIndex =
+document.getElementById('usuarioPrestamo').value;
 
-let fecha =
-document.getElementById('fecha').value;
+let fechaDevolucion =
+document.getElementById('fechaDevolucion').value;
 
-let { error } =
-await supabase
-.from('prestamos')
-.insert([{
-codigo,
-libro,
-usuario,
-fecha_devolucion:fecha,
-devuelto:false
-}]);
+if(
+codigo === '' ||
+libro === '' ||
+usuarioIndex === ''
+){
 
-if(error){
-alert('Error guardando préstamo');
-console.log(error);
+alert('Complete todos los campos');
+
 return;
+
 }
 
-alert('Préstamo guardado');
+const usuario = usuarios[usuarioIndex];
 
-cargarPrestamos();
+const { error } = await supabaseClient
+.from('prestamos')
+.insert([
+{
+codigo:codigo,
+libro:libro,
+usuario:usuario.nombre,
+fecha_devolucion:fechaDevolucion,
+devuelto:false
+}
+]);
+
+if(error){
+
+alert('Error al guardar préstamo');
+
+console.log(error);
+
+return;
+
+}
+
+alert('Préstamo registrado');
+
+document.getElementById('codigo').value='';
+
+document.getElementById('libro').value='';
+
+document.getElementById('buscarUsuario').value='';
+
+document.getElementById('usuarioPrestamo').value='';
+
+await cargarPrestamos();
 
 }
 
 async function cargarPrestamos(){
 
-let { data } =
-await supabase
+const { data, error } =
+await supabaseClient
 .from('prestamos')
-.select('*');
+.select('*')
+.order('id');
+
+if(error){
+
+console.log(error);
+
+return;
+
+}
+
+prestamos = data;
+
+mostrarPrestamos();
+
+}
+
+function mostrarPrestamos(){
 
 let tabla =
-document.getElementById('tabla');
+document.getElementById('tablaPrestamos');
 
 tabla.innerHTML='';
 
+prestamos.forEach(function(p,index){
+
+if(!p.devuelto){
+
 let hoy = new Date();
 
-data.forEach(p=>{
-
-let fecha =
+let fechaDev =
 new Date(p.fecha_devolucion);
 
-let dias =
-Math.ceil((fecha-hoy)/(1000*60*60*24));
+let diferencia =
+Math.ceil(
+(fechaDev - hoy)/(1000*60*60*24)
+);
 
-let estado = 'Normal';
+let estado = 'En tiempo';
+
 let clase = 'estado-normal';
 
-if(dias <= 3){
-estado='Por vencer';
-clase='estado-alerta';
+let retraso = 0;
+
+if(diferencia < 0){
+
+estado = 'Vencido';
+
+clase = 'estado-vencido';
+
+retraso = Math.abs(diferencia);
+
+}
+else if(diferencia <= 3){
+
+estado = 'Por vencer';
+
+clase = 'estado-alerta';
+
 }
 
-if(dias < 0){
-estado='Vencido';
-clase='estado-vencido';
+tabla.innerHTML +=
+'<tr class="'+clase+'">'+
+'<td>'+p.codigo+'</td>'+
+'<td>'+p.libro+'</td>'+
+'<td>'+p.usuario+'</td>'+
+'<td>'+p.fecha_devolucion+'</td>'+
+'<td>'+
+estado+
+'<br><button class="btn-devolver" onclick="devolverLibro('+p.id+')">Devolver</button>'+
+'</td>'+
+'<td>'+retraso+'</td>'+
+'</tr>';
+
 }
-
-tabla.innerHTML += `
-
-<tr class="${clase}">
-
-<td>${p.codigo}</td>
-
-<td>${p.libro}</td>
-
-<td>${p.usuario}</td>
-
-<td>${p.fecha_devolucion}</td>
-
-<td>${estado}</td>
-
-</tr>
-
-`;
 
 });
 
 }
 
-cargarUsuarios();
-cargarPrestamos();
+async function devolverLibro(id){
+
+const { error } =
+await supabaseClient
+.from('prestamos')
+.update({
+devuelto:true
+})
+.eq('id',id);
+
+if(error){
+
+alert('Error');
+
+console.log(error);
+
+return;
+
+}
+
+alert('Libro devuelto');
+
+await cargarPrestamos();
+
+}
+
+function mostrarInformacionUsuario(){
+
+let index =
+document.getElementById('listaUsuarios').value;
+
+if(index === ''){
+
+document.getElementById('informacionUsuario').innerHTML='';
+
+return;
+
+}
+
+let usuario = usuarios[index];
+
+let html = '';
+
+html += '<div class="info-usuario">';
+
+html += '<h3>'+usuario.nombre+'</h3>';
+
+html += '<p><strong>Identidad:</strong> '+usuario.identidad+'</p>';
+
+html += '<p><strong>Etapa:</strong> '+usuario.etapa+'</p>';
+
+html += '</div>';
+
+document.getElementById('informacionUsuario').innerHTML =
+html;
+
+}
 
 </script>
 
