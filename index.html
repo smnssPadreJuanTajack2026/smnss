@@ -3,16 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Biblioteca Padre Juan Tajack</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-font-family:Arial;
+font-family:Arial,sans-serif;
 background:#f2f4f8;
+}
+
+.header{
+background:linear-gradient(90deg,#001f3f,#004f77);
+color:white;
+padding:20px;
+text-align:center;
+position:relative;
+}
+
+.menu-btn{
+position:absolute;
+left:20px;
+top:20px;
+font-size:30px;
+cursor:pointer;
+}
+
+.main{
+display:flex;
+}
+
+.sidebar{
+width:220px;
+background:#012b46;
+min-height:100vh;
+}
+
+.sidebar.oculto{
+display:none;
+}
+
+.menu-item{
+color:white;
+padding:18px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:#014d7a;
+}
+
+.content{
+flex:1;
 padding:20px;
 }
 
@@ -20,13 +70,13 @@ padding:20px;
 background:white;
 padding:20px;
 border-radius:12px;
-margin-bottom:20px;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
+margin-bottom:20px;
 }
 
-h2{
-color:#004f77;
+.card h2{
 margin-bottom:15px;
+color:#004f77;
 }
 
 input,select,button{
@@ -38,17 +88,25 @@ border:1px solid #ccc;
 }
 
 button{
-background:#004f77;
+background:#006b9f;
 color:white;
 border:none;
-cursor:pointer;
 font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#004f77;
+}
+
+.btn-devolver{
+background:#2e7d32;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:20px;
+margin-top:15px;
 }
 
 table th{
@@ -58,9 +116,17 @@ padding:10px;
 }
 
 table td{
+border:1px solid #ddd;
 padding:10px;
-border:1px solid #ccc;
 text-align:center;
+}
+
+.panel{
+display:none;
+}
+
+.panel.active{
+display:block;
 }
 
 .estado-normal{
@@ -75,24 +141,70 @@ background:#fff0b3;
 background:#ffd6d6;
 }
 
-</style>
+.info-usuario{
+background:#eef7ff;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
 
+</style>
 </head>
 
 <body>
 
+<div class="header">
+
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<h1>Biblioteca Padre Juan Tajack</h1>
+
+<h3>Seminario Mayor Nuestra Señora de Suyapa</h3>
+
+</div>
+
+<div class="main">
+
+<div class="sidebar" id="sidebar">
+
+<div class="menu-item" onclick="mostrarPanel('inicio')">
+Inicio
+</div>
+
+<div class="menu-item" onclick="mostrarPanel('usuarios')">
+Usuarios
+</div>
+
+<div class="menu-item" onclick="mostrarPanel('prestamos')">
+Préstamos
+</div>
+
+</div>
+
+<div class="content">
+
+<div id="inicio" class="panel active">
+
 <div class="card">
 
-<h2>Registrar Usuario</h2>
+<h2>Registro de Usuario</h2>
 
 <input type="text" id="nombre" placeholder="Nombre completo">
 
-<input type="text" id="identidad" placeholder="Número identidad">
+<input type="text" id="identidad" placeholder="Número de identidad">
 
 <select id="etapa">
+
 <option value="">Seleccione etapa</option>
-<option value="Configuradora">Configuradora</option>
-<option value="Discipular">Discipular</option>
+
+<option value="Configuradora">
+Configuradora
+</option>
+
+<option value="Discipular">
+Discipular
+</option>
+
 </select>
 
 <button onclick="registrarUsuario()">
@@ -100,18 +212,55 @@ Guardar Usuario
 </button>
 
 </div>
+</div>
+
+<div id="usuarios" class="panel">
+
+<div class="card">
+
+<h2>Usuarios Registrados</h2>
+
+<select id="listaUsuarios"
+onchange="mostrarInformacionUsuario()">
+
+<option value="">
+Seleccione usuario
+</option>
+
+</select>
+
+<div id="informacionUsuario"></div>
+
+</div>
+</div>
+
+<div id="prestamos" class="panel">
 
 <div class="card">
 
 <h2>Nuevo Préstamo</h2>
 
-<input type="text" id="codigo" placeholder="Código">
+<input type="text"
+id="codigo"
+placeholder="Código del préstamo">
 
-<input type="text" id="libro" placeholder="Libro">
+<input type="text"
+id="libro"
+placeholder="Nombre del libro">
 
-<select id="usuario"></select>
+<select id="usuarioPrestamo">
 
-<input type="date" id="fecha">
+<option value="">
+Seleccione usuario
+</option>
+
+</select>
+
+<label style="display:block;margin-top:10px;">
+Fecha devolución
+</label>
+
+<input type="date" id="fechaDevolucion">
 
 <button onclick="registrarPrestamo()">
 Registrar Préstamo
@@ -121,7 +270,7 @@ Registrar Préstamo
 
 <div class="card">
 
-<h2>Préstamos</h2>
+<h2>Libros Prestados</h2>
 
 <table>
 
@@ -133,14 +282,19 @@ Registrar Préstamo
 <th>Usuario</th>
 <th>Fecha devolución</th>
 <th>Estado</th>
+<th>Acción</th>
 </tr>
 
 </thead>
 
-<tbody id="tabla"></tbody>
+<tbody id="tablaPrestamos"></tbody>
 
 </table>
 
+</div>
+</div>
+
+</div>
 </div>
 
 <script>
@@ -157,159 +311,412 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+window.onload = async function(){
+
+colocarFecha();
+
+await actualizarUsuarios();
+
+await mostrarPrestamos();
+
+};
+
+function toggleMenu(){
+
+document
+.getElementById('sidebar')
+.classList
+.toggle('oculto');
+
+}
+
+function mostrarPanel(id){
+
+let paneles =
+document.querySelectorAll('.panel');
+
+paneles.forEach(function(p){
+
+p.classList.remove('active');
+
+});
+
+document
+.getElementById(id)
+.classList
+.add('active');
+
+}
+
+function colocarFecha(){
+
+let fecha = new Date();
+
+fecha.setDate(
+fecha.getDate() + 15
+);
+
+let year =
+fecha.getFullYear();
+
+let month =
+String(
+fecha.getMonth()+1
+).padStart(2,'0');
+
+let day =
+String(
+fecha.getDate()
+).padStart(2,'0');
+
+let finalFecha =
+year + '-' + month + '-' + day;
+
+document
+.getElementById('fechaDevolucion')
+.value = finalFecha;
+
+}
+
 async function registrarUsuario(){
 
 let nombre =
-document.getElementById("nombre").value;
+document.getElementById('nombre').value;
 
 let identidad =
-document.getElementById("identidad").value;
+document.getElementById('identidad').value;
 
 let etapa =
-document.getElementById("etapa").value;
+document.getElementById('etapa').value;
 
-if(nombre==="" || identidad==="" || etapa===""){
-alert("Complete todos los campos");
+if(
+nombre === '' ||
+identidad === '' ||
+etapa === ''
+){
+alert('Complete todos los campos');
 return;
 }
 
+const { error } =
 await supabase
-.from("usuarios")
+.from('usuarios')
 .insert([{
-nombre,
-identidad,
-etapa
+nombre:nombre,
+identidad:identidad,
+etapa:etapa
 }]);
 
-alert("Usuario registrado");
+if(error){
 
-document.getElementById("nombre").value="";
-document.getElementById("identidad").value="";
-document.getElementById("etapa").value="";
+alert('Error al guardar usuario');
 
-cargarUsuarios();
+console.log(error);
+
+return;
 
 }
 
-async function cargarUsuarios(){
+alert('Usuario registrado');
 
-let { data } =
+document.getElementById('nombre').value='';
+document.getElementById('identidad').value='';
+document.getElementById('etapa').value='';
+
+await actualizarUsuarios();
+
+}
+
+async function actualizarUsuarios(){
+
+let { data, error } =
 await supabase
-.from("usuarios")
-.select("*");
+.from('usuarios')
+.select('*')
+.order('nombre');
 
-let select =
-document.getElementById("usuario");
+if(error){
 
-select.innerHTML="";
+console.log(error);
 
-data.forEach(u=>{
+return;
 
-select.innerHTML +=
-`<option>${u.nombre}</option>`;
+}
 
-});
+let lista =
+document.getElementById('listaUsuarios');
+
+let selectPrestamo =
+document.getElementById('usuarioPrestamo');
+
+lista.innerHTML =
+'<option value="">Seleccione usuario</option>';
+
+selectPrestamo.innerHTML =
+'<option value="">Seleccione usuario</option>';
+
+for(let i=0;i<data.length;i++){
+
+lista.innerHTML +=
+'<option value="'+data[i].id+'">'+
+data[i].nombre+
+'</option>';
+
+selectPrestamo.innerHTML +=
+'<option value="'+data[i].nombre+'">'+
+data[i].nombre+
+'</option>';
+
+}
 
 }
 
 async function registrarPrestamo(){
 
 let codigo =
-document.getElementById("codigo").value;
+document.getElementById('codigo').value;
 
 let libro =
-document.getElementById("libro").value;
+document.getElementById('libro').value;
 
 let usuario =
-document.getElementById("usuario").value;
+document.getElementById('usuarioPrestamo').value;
 
-let fecha =
-document.getElementById("fecha").value;
+let fechaDevolucion =
+document.getElementById('fechaDevolucion').value;
 
-if(codigo==="" || libro==="" || usuario==="" || fecha===""){
-alert("Complete todos los campos");
+if(
+codigo === '' ||
+libro === '' ||
+usuario === ''
+){
+alert('Complete todos los campos');
 return;
 }
 
+const { error } =
 await supabase
-.from("prestamos")
+.from('prestamos')
 .insert([{
-codigo,
-libro,
-usuario,
-fecha_devolucion:fecha,
+codigo:codigo,
+libro:libro,
+usuario:usuario,
+fecha_devolucion:fechaDevolucion,
 devuelto:false
 }]);
 
-alert("Préstamo registrado");
+if(error){
 
-cargarPrestamos();
+alert('Error al registrar préstamo');
+
+console.log(error);
+
+return;
 
 }
 
-async function cargarPrestamos(){
+alert('Préstamo registrado');
 
-let { data } =
+document.getElementById('codigo').value='';
+document.getElementById('libro').value='';
+
+await mostrarPrestamos();
+
+}
+
+async function mostrarPrestamos(){
+
+let { data, error } =
 await supabase
-.from("prestamos")
-.select("*");
+.from('prestamos')
+.select('*')
+.order('id', { ascending:false });
+
+if(error){
+
+console.log(error);
+
+return;
+
+}
 
 let tabla =
-document.getElementById("tabla");
+document.getElementById('tablaPrestamos');
 
-tabla.innerHTML="";
+tabla.innerHTML='';
 
-let hoy = new Date();
+for(let i=0;i<data.length;i++){
 
-data.forEach(p=>{
+let p = data[i];
 
 if(!p.devuelto){
 
-let fecha =
+let hoy = new Date();
+
+let fechaDev =
 new Date(p.fecha_devolucion);
 
 let diferencia =
 Math.ceil(
-(fecha-hoy)/(1000*60*60*24)
+(fechaDev - hoy) /
+(1000*60*60*24)
 );
 
-let estado = "En tiempo";
-let clase = "estado-normal";
+let estado = 'En tiempo';
+
+let clase = 'estado-normal';
 
 if(diferencia < 0){
-estado = "Vencido";
-clase = "estado-vencido";
+
+estado = 'Vencido';
+
+clase = 'estado-vencido';
+
 }else if(diferencia <= 1){
-estado = "Entrega hoy";
-clase = "estado-alerta";
-}
 
-tabla.innerHTML += `
+estado = 'Entrega hoy';
 
-<tr class="${clase}">
-
-<td>${p.codigo}</td>
-
-<td>${p.libro}</td>
-
-<td>${p.usuario}</td>
-
-<td>${p.fecha_devolucion}</td>
-
-<td>${estado}</td>
-
-</tr>
-
-`;
+clase = 'estado-alerta';
 
 }
 
-});
+let fila =
+'<tr class="'+clase+'">';
+
+fila += '<td>'+p.codigo+'</td>';
+
+fila += '<td>'+p.libro+'</td>';
+
+fila += '<td>'+p.usuario+'</td>';
+
+fila += '<td>'+p.fecha_devolucion+'</td>';
+
+fila += '<td>'+estado+'</td>';
+
+fila +=
+'<td><button class="btn-devolver" onclick="devolverLibro('+p.id+')">Devolver</button></td>';
+
+fila += '</tr>';
+
+tabla.innerHTML += fila;
 
 }
 
-cargarUsuarios();
-cargarPrestamos();
+}
+
+}
+
+async function devolverLibro(id){
+
+const { error } =
+await supabase
+.from('prestamos')
+.update({
+devuelto:true
+})
+.eq('id', id);
+
+if(error){
+
+alert('Error');
+
+return;
+
+}
+
+alert('Libro devuelto');
+
+await mostrarPrestamos();
+
+}
+
+async function mostrarInformacionUsuario(){
+
+let id =
+document.getElementById('listaUsuarios').value;
+
+if(id === ''){
+
+document
+.getElementById('informacionUsuario')
+.innerHTML='';
+
+return;
+
+}
+
+let { data:userData } =
+await supabase
+.from('usuarios')
+.select('*')
+.eq('id', id)
+.single();
+
+let { data:prestamosData } =
+await supabase
+.from('prestamos')
+.select('*')
+.eq('usuario', userData.nombre);
+
+let html = '';
+
+html += '<div class="info-usuario">';
+
+html += '<h3>'+userData.nombre+'</h3>';
+
+html +=
+'<p><strong>Identidad:</strong> '+
+userData.identidad+
+'</p>';
+
+html +=
+'<p><strong>Etapa:</strong> '+
+userData.etapa+
+'</p>';
+
+html += '</div>';
+
+html +=
+'<h3 style="margin-top:20px;">Historial</h3>';
+
+html += '<table>';
+
+html += '<tr>';
+
+html += '<th>Libro</th>';
+
+html += '<th>Fecha devolución</th>';
+
+html += '<th>Estado</th>';
+
+html += '</tr>';
+
+for(let i=0;i<prestamosData.length;i++){
+
+html += '<tr>';
+
+html += '<td>'+prestamosData[i].libro+'</td>';
+
+html += '<td>'+prestamosData[i].fecha_devolucion+'</td>';
+
+html +=
+'<td>'+
+(prestamosData[i].devuelto
+? 'Devuelto'
+: 'Prestado')+
+'</td>';
+
+html += '</tr>';
+
+}
+
+html += '</table>';
+
+document
+.getElementById('informacionUsuario')
+.innerHTML = html;
+
+}
 
 </script>
 
