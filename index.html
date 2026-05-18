@@ -1,23 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Biblioteca Padre Juan Tajack
-</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca Padre Juan Tajack</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-font-family:Arial;
+font-family:Arial,sans-serif;
 background:#f2f4f8;
+}
+
+.header{
+background:linear-gradient(90deg,#001f3f,#004f77);
+color:white;
+padding:20px;
+text-align:center;
+position:relative;
+}
+
+.menu-btn{
+position:absolute;
+left:20px;
+top:20px;
+font-size:30px;
+cursor:pointer;
+}
+
+.main{
+display:flex;
+}
+
+.sidebar{
+width:220px;
+background:#012b46;
+min-height:100vh;
+}
+
+.sidebar.oculto{
+display:none;
+}
+
+.menu-item{
+color:white;
+padding:18px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:#014d7a;
+}
+
+.content{
+flex:1;
 padding:20px;
 }
 
@@ -25,65 +70,145 @@ padding:20px;
 background:white;
 padding:20px;
 border-radius:12px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
 margin-bottom:20px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h2{
+margin-bottom:15px;
+color:#004f77;
 }
 
 input,select,button{
 width:100%;
 padding:12px;
 margin-top:10px;
-border-radius:8px;
+border-radius:6px;
 border:1px solid #ccc;
-box-sizing:border-box;
 }
 
 button{
-background:#004f77;
+background:#006b9f;
 color:white;
 border:none;
+font-weight:bold;
 cursor:pointer;
 }
 
 button:hover{
-background:#006699;
+background:#004f77;
+}
+
+.btn-devolver{
+background:#2e7d32;
+margin-top:10px;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:20px;
-background:white;
+margin-top:15px;
 }
 
 table th{
 background:#004f77;
 color:white;
+padding:10px;
 }
 
-table th, table td{
-border:1px solid #ccc;
+table td{
+border:1px solid #ddd;
 padding:10px;
 text-align:center;
 }
 
-footer{
-text-align:center;
-margin-top:30px;
-color:#666;
+.panel{
+display:none;
+}
+
+.panel.active{
+display:block;
+}
+
+.lista-busqueda{
+border:1px solid #ccc;
+background:white;
+border-radius:6px;
+max-height:150px;
+overflow-y:auto;
+display:none;
+margin-top:5px;
+}
+
+.item-usuario{
+padding:10px;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.item-usuario:hover{
+background:#eef7ff;
+}
+
+.estado-normal{
+background:#d6e8ff;
+}
+
+.estado-alerta{
+background:#fff0b3;
+}
+
+.estado-vencido{
+background:#ffd6d6;
+}
+
+.info-usuario{
+background:#eef7ff;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
 }
 
 </style>
-
 </head>
 
 <body>
 
+<div class="header">
+
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<h1>Biblioteca Padre Juan Tajack</h1>
+
+<h3>Seminario Mayor Nuestra Señora de Suyapa</h3>
+
+</div>
+
+<div class="main">
+
+<div class="sidebar" id="sidebar">
+
+<div class="menu-item" onclick="mostrarPanel('inicio')">
+Inicio
+</div>
+
+<div class="menu-item" onclick="mostrarPanel('usuarios')">
+Usuarios
+</div>
+
+<div class="menu-item" onclick="mostrarPanel('prestamos')">
+Préstamos
+</div>
+
+</div>
+
+<div class="content">
+
+<div id="inicio" class="panel active">
+
 <div class="card">
 
-<h2>
-Registrar Usuario
-</h2>
+<h2>Registro de Usuario</h2>
 
 <input type="text"
 id="nombre"
@@ -114,25 +239,59 @@ Guardar Usuario
 </button>
 
 </div>
+</div>
+
+<div id="usuarios" class="panel">
 
 <div class="card">
 
-<h2>
-Nuevo Préstamo
-</h2>
+<h2>Usuarios Registrados</h2>
+
+<select id="listaUsuarios"
+onchange="mostrarInformacionUsuario()">
+
+<option value="">
+Seleccione usuario
+</option>
+
+</select>
+
+<div id="informacionUsuario"></div>
+
+</div>
+</div>
+
+<div id="prestamos" class="panel">
+
+<div class="card">
+
+<h2>Nuevo Préstamo</h2>
 
 <input type="text"
 id="codigo"
-placeholder="Código del libro">
+placeholder="Código del préstamo">
 
 <input type="text"
 id="libro"
 placeholder="Nombre del libro">
 
-<select id="usuario"></select>
+<input type="text"
+id="buscarUsuario"
+placeholder="Buscar usuario"
+onkeyup="filtrarUsuarios()">
+
+<div class="lista-busqueda"
+id="listaBusqueda"></div>
+
+<input type="hidden"
+id="usuarioPrestamo">
+
+<label style="display:block;margin-top:10px;">
+Fecha devolución
+</label>
 
 <input type="date"
-id="fecha">
+id="fechaDevolucion">
 
 <button onclick="registrarPrestamo()">
 Registrar Préstamo
@@ -142,9 +301,7 @@ Registrar Préstamo
 
 <div class="card">
 
-<h2>
-Libros Prestados
-</h2>
+<h2>Libros Prestados</h2>
 
 <table>
 
@@ -154,26 +311,27 @@ Libros Prestados
 <th>Código</th>
 <th>Libro</th>
 <th>Usuario</th>
-<th>Fecha entrega</th>
+<th>Fecha devolución</th>
 <th>Estado</th>
+<th>Días retraso</th>
 </tr>
 
 </thead>
 
-<tbody id="tabla"></tbody>
+<tbody id="tablaPrestamos"></tbody>
 
 </table>
 
 </div>
+</div>
 
-<footer>
-Biblioteca Padre Juan Tajack
-</footer>
+</div>
+</div>
 
 <script>
 
 const SUPABASE_URL =
-"https://wizrwignblrgkhyvtlyl.supabase.co/rest/v1/";
+"https://wizrwignblrgkhyvtlyl.supabase.co";
 
 const SUPABASE_KEY =
 "sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ";
@@ -184,183 +342,439 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+let usuarios = [];
+let prestamos = [];
+
+window.onload = async function(){
+
+colocarFecha();
+
+await cargarDatos();
+
+};
+
+async function cargarDatos(){
+
+let usuariosDB =
+await supabase
+.from('usuarios')
+.select('*');
+
+usuarios = usuariosDB.data || [];
+
+let prestamosDB =
+await supabase
+.from('prestamos')
+.select('*');
+
+prestamos = prestamosDB.data || [];
+
+actualizarUsuarios();
+
+mostrarPrestamos();
+
+}
+
+function toggleMenu(){
+
+document
+.getElementById('sidebar')
+.classList
+.toggle('oculto');
+
+}
+
+function mostrarPanel(id){
+
+let paneles =
+document.querySelectorAll('.panel');
+
+paneles.forEach(function(p){
+
+p.classList.remove('active');
+
+});
+
+document
+.getElementById(id)
+.classList
+.add('active');
+
+}
+
+function colocarFecha(){
+
+let fecha = new Date();
+
+fecha.setDate(
+fecha.getDate() + 15
+);
+
+let year =
+fecha.getFullYear();
+
+let month =
+String(
+fecha.getMonth()+1
+).padStart(2,'0');
+
+let day =
+String(
+fecha.getDate()
+).padStart(2,'0');
+
+let finalFecha =
+year + '-' + month + '-' + day;
+
+document
+.getElementById('fechaDevolucion')
+.value = finalFecha;
+
+}
+
 async function registrarUsuario(){
 
 let nombre =
-document.getElementById("nombre").value;
+document.getElementById('nombre').value;
 
 let identidad =
-document.getElementById("identidad").value;
+document.getElementById('identidad').value;
 
 let etapa =
-document.getElementById("etapa").value;
+document.getElementById('etapa').value;
 
 if(
-nombre === "" ||
-identidad === "" ||
-etapa === ""
+nombre === '' ||
+identidad === '' ||
+etapa === ''
 ){
-alert("Complete todos los campos");
+alert('Complete todos los campos');
 return;
 }
 
 await supabase
-.from("usuarios")
+.from('usuarios')
 .insert([{
-nombre,
-identidad,
-etapa
+nombre:nombre,
+identidad:identidad,
+etapa:etapa
 }]);
 
-alert("Usuario registrado");
+await cargarDatos();
 
-document.getElementById("nombre").value="";
-document.getElementById("identidad").value="";
-document.getElementById("etapa").value="";
+document.getElementById('nombre').value='';
+document.getElementById('identidad').value='';
+document.getElementById('etapa').value='';
 
-cargarUsuarios();
+alert('Usuario registrado');
 
 }
 
-async function cargarUsuarios(){
+function actualizarUsuarios(){
 
-let { data } =
-await supabase
-.from("usuarios")
-.select("*")
-.order("nombre");
+let lista =
+document.getElementById('listaUsuarios');
 
-let select =
-document.getElementById("usuario");
+lista.innerHTML =
+'<option value="">Seleccione usuario</option>';
 
-select.innerHTML="";
+for(let i=0;i<usuarios.length;i++){
 
-data.forEach(u=>{
+lista.innerHTML +=
+'<option value="'+i+'">'+
+usuarios[i].nombre+
+'</option>';
 
-select.innerHTML +=
-`<option>${u.nombre}</option>`;
+}
 
-});
+}
+
+function filtrarUsuarios(){
+
+let texto =
+document
+.getElementById('buscarUsuario')
+.value
+.toLowerCase();
+
+let lista =
+document.getElementById('listaBusqueda');
+
+lista.innerHTML='';
+
+if(texto === ''){
+
+lista.style.display='none';
+
+return;
+
+}
+
+for(let i=0;i<usuarios.length;i++){
+
+if(
+usuarios[i]
+.nombre
+.toLowerCase()
+.includes(texto)
+){
+
+lista.innerHTML +=
+'<div class="item-usuario" onclick="seleccionarUsuario('+i+')">'+
+usuarios[i].nombre+
+' - '+
+usuarios[i].identidad+
+'</div>';
+
+}
+
+}
+
+lista.style.display='block';
+
+}
+
+function seleccionarUsuario(index){
+
+document
+.getElementById('buscarUsuario')
+.value =
+usuarios[index].nombre;
+
+document
+.getElementById('usuarioPrestamo')
+.value = index;
+
+document
+.getElementById('listaBusqueda')
+.style.display='none';
 
 }
 
 async function registrarPrestamo(){
 
 let codigo =
-document.getElementById("codigo").value;
+document.getElementById('codigo').value;
 
 let libro =
-document.getElementById("libro").value;
+document.getElementById('libro').value;
 
-let usuario =
-document.getElementById("usuario").value;
+let usuarioIndex =
+document.getElementById('usuarioPrestamo').value;
 
-let fecha =
-document.getElementById("fecha").value;
+let fechaDevolucion =
+document.getElementById('fechaDevolucion').value;
+
+if(
+codigo === '' ||
+libro === '' ||
+usuarioIndex === ''
+){
+alert('Complete todos los campos');
+return;
+}
 
 await supabase
-.from("prestamos")
+.from('prestamos')
 .insert([{
-codigo,
-libro,
-usuario,
-fecha_prestamo:fecha,
-devuelto:false
+codigo:codigo,
+libro:libro,
+usuario:usuarios[usuarioIndex].nombre,
+fechaDevolucion:fechaDevolucion,
+fechaPrestamo:new Date().toLocaleDateString(),
+devuelto:false,
+diasRetraso:0
 }]);
 
-alert("Préstamo registrado");
+await cargarDatos();
 
-document.getElementById("codigo").value="";
-document.getElementById("libro").value="";
-document.getElementById("fecha").value="";
+document.getElementById('codigo').value='';
+document.getElementById('libro').value='';
+document.getElementById('buscarUsuario').value='';
+document.getElementById('usuarioPrestamo').value='';
 
-cargarPrestamos();
+alert('Préstamo registrado');
 
 }
 
-async function cargarPrestamos(){
-
-let { data } =
-await supabase
-.from("prestamos")
-.select("*")
-.order("id", { ascending:false });
+function mostrarPrestamos(){
 
 let tabla =
-document.getElementById("tabla");
+document.getElementById('tablaPrestamos');
 
-tabla.innerHTML="";
+tabla.innerHTML='';
 
-data.forEach(p=>{
+for(let i=0;i<prestamos.length;i++){
+
+let p = prestamos[i];
 
 if(!p.devuelto){
 
-let hoy =
-new Date();
+let hoy = new Date();
 
-let entrega =
-new Date(p.fecha_prestamo);
+let fechaDev =
+new Date(p.fechaDevolucion);
 
-let color = "";
+let diferencia =
+Math.ceil(
+(fechaDev - hoy) /
+(1000*60*60*24)
+);
 
-hoy.setHours(0,0,0,0);
-entrega.setHours(0,0,0,0);
+let estado = 'En tiempo';
 
-if(entrega < hoy){
+let clase = 'estado-normal';
 
-color = "#ffb3b3";
+let retraso = 0;
 
-}else if(
-entrega.getTime() === hoy.getTime()
-){
+if(diferencia < 0){
 
-color = "#fff0a6";
+estado = 'Vencido';
 
-}else{
+clase = 'estado-vencido';
 
-color = "white";
+retraso = Math.abs(diferencia);
+
+}else if(diferencia <= 3){
+
+estado = 'Por vencer';
+
+clase = 'estado-alerta';
+
+}
+
+let fila =
+'<tr class="'+clase+'">';
+
+fila += '<td>'+p.codigo+'</td>';
+
+fila += '<td>'+p.libro+'</td>';
+
+fila += '<td>'+p.usuario+'</td>';
+
+fila += '<td>'+p.fechaDevolucion+'</td>';
+
+fila +=
+'<td>'+
+estado+
+'<br><button class="btn-devolver" onclick="devolverLibro('+i+')">Devolver</button></td>';
+
+fila += '<td>'+retraso+'</td>';
+
+fila += '</tr>';
+
+tabla.innerHTML += fila;
 
 }
 
-tabla.innerHTML += `
-
-<tr style="background:${color}">
-
-<td>${p.codigo}</td>
-
-<td>${p.libro}</td>
-
-<td>${p.usuario}</td>
-
-<td>${p.fecha_prestamo}</td>
-
-<td>
-
-${
-entrega < hoy
-? "Vencido"
-:
-entrega.getTime() === hoy.getTime()
-? "Entrega hoy"
-:
-"En tiempo"
 }
 
-</td>
+}
 
-</tr>
+async function devolverLibro(index){
 
-`;
+await supabase
+.from('prestamos')
+.update({
+devuelto:true
+})
+.eq('id', prestamos[index].id);
+
+await cargarDatos();
+
+mostrarInformacionUsuario();
+
+alert('Libro devuelto');
 
 }
+
+function mostrarInformacionUsuario(){
+
+let index =
+document.getElementById('listaUsuarios').value;
+
+if(index === ''){
+
+document
+.getElementById('informacionUsuario')
+.innerHTML='';
+
+return;
+
+}
+
+let usuario = usuarios[index];
+
+let historial =
+prestamos.filter(function(p){
+
+return (
+p.usuario === usuario.nombre &&
+p.devuelto
+);
 
 });
 
+let html = '';
+
+html += '<div class="info-usuario">';
+
+html += '<h3>'+usuario.nombre+'</h3>';
+
+html +=
+'<p><strong>Identidad:</strong> '+
+usuario.identidad+
+'</p>';
+
+html +=
+'<p><strong>Etapa:</strong> '+
+usuario.etapa+
+'</p>';
+
+html += '</div>';
+
+html +=
+'<h3 style="margin-top:20px;">
+Historial
+</h3>';
+
+html += '<table>';
+
+html += '<tr>';
+
+html += '<th>Libro</th>';
+
+html += '<th>Fecha préstamo</th>';
+
+html += '<th>Fecha devolución</th>';
+
+html += '<th>Días retraso</th>';
+
+html += '</tr>';
+
+for(let i=0;i<historial.length;i++){
+
+html += '<tr>';
+
+html += '<td>'+historial[i].libro+'</td>';
+
+html += '<td>'+historial[i].fechaPrestamo+'</td>';
+
+html += '<td>'+historial[i].fechaDevolucion+'</td>';
+
+html += '<td>'+historial[i].diasRetraso+'</td>';
+
+html += '</tr>';
+
 }
 
-cargarUsuarios();
+html += '</table>';
 
-cargarPrestamos();
+document
+.getElementById('informacionUsuario')
+.innerHTML = html;
+
+}
 
 </script>
 
