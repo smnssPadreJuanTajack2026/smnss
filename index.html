@@ -230,16 +230,12 @@ Préstamos
 <div class="card">
 
 <h1>
-
 Biblioteca SMNSS
-
 </h1>
 
 <p>
-
 Sistema de biblioteca del
 Seminario Mayor Nuestra Señora de Suyapa.
-
 </p>
 
 </div>
@@ -253,9 +249,7 @@ style="display:none;">
 <div class="card">
 
 <h1>
-
 Buscar Usuario
-
 </h1>
 
 <input
@@ -275,9 +269,7 @@ class="card"
 id="registroUsuarios">
 
 <h1>
-
 Registro de Usuario
-
 </h1>
 
 <input
@@ -325,9 +317,7 @@ style="display:none;">
 <div class="card">
 
 <h1>
-
 Nuevo Préstamo
-
 </h1>
 
 <input
@@ -346,9 +336,7 @@ id="usuarioPrestamo"
 placeholder="Usuario">
 
 <label>
-
 Fecha devolución
-
 </label>
 
 <input
@@ -368,9 +356,7 @@ Registrar Préstamo
 <div class="card">
 
 <h1>
-
 Libros Prestados
-
 </h1>
 
 <table>
@@ -401,8 +387,11 @@ Libros Prestados
 
 <script>
 
-const SUPABASE_URL = "TU_URL_SUPABASE";
-const SUPABASE_KEY = "TU_SUPABASE_KEY";
+const SUPABASE_URL =
+"https://wizrwignblrgkhyvtlyl.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ";
 
 const supabaseClient = supabase.createClient(
 SUPABASE_URL,
@@ -495,36 +484,26 @@ document.getElementById(
 <div class="card">
 
 <h1>
-
 Biblioteca SMNSS
-
 </h1>
 
 <p>
-
 Bienvenido al sistema de consulta de la
 Biblioteca Padre Juan Tajack.
-
 </p>
 
 <h2>
-
 Qué es una biblioteca
-
 </h2>
 
 <p>
-
 La biblioteca es un espacio académico
 destinado al estudio, investigación,
 lectura y formación intelectual.
-
 </p>
 
 <h2>
-
 Secciones
-
 </h2>
 
 <ul>
@@ -538,9 +517,7 @@ Secciones
 </ul>
 
 <h2>
-
 Reglas
-
 </h2>
 
 <ul>
@@ -580,7 +557,7 @@ id
 
 }
 
-/* CARGAR */
+/* CARGAR DATOS */
 
 async function cargarUsuarios(){
 
@@ -625,6 +602,14 @@ document.getElementById(
 'etapa'
 ).value;
 
+if(!nombre || !identidad){
+
+alert('Complete los datos');
+
+return;
+
+}
+
 const { error } = await supabaseClient
 .from('usuarios')
 .insert([{
@@ -640,6 +625,14 @@ alert('Error al guardar');
 return;
 
 }
+
+document.getElementById(
+'nombre'
+).value='';
+
+document.getElementById(
+'identidad'
+).value='';
 
 await cargarUsuarios();
 
@@ -721,23 +714,17 @@ document.getElementById(
 <div class="usuario-box">
 
 <h2>
-
 ${usuario.nombre}
-
 </h2>
 
 <p>
-
 <b>Identidad:</b>
 ${usuario.identidad}
-
 </p>
 
 <p>
-
 <b>Etapa:</b>
 ${usuario.etapa}
-
 </p>
 
 ${modoVisitante ? '' : `
@@ -761,9 +748,7 @@ Eliminar Usuario
 `}
 
 <h2>
-
 Historial de préstamos
-
 </h2>
 
 <table>
@@ -891,6 +876,19 @@ document.getElementById(
 'fecha'
 ).value;
 
+if(
+!codigo ||
+!libro ||
+!usuario ||
+!fecha
+){
+
+alert('Complete los datos');
+
+return;
+
+}
+
 const { error } = await supabaseClient
 .from('prestamos')
 .insert([{
@@ -941,7 +939,7 @@ alert('Libro devuelto');
 
 }
 
-/* RENDER PRESTAMOS */
+/* MOSTRAR PRESTAMOS */
 
 function renderPrestamos(){
 
@@ -986,15 +984,11 @@ html += `
 <td>${p.fecha_devolucion}</td>
 
 <td>
-
 ${dias>0?'Vencido':'Por vencer'}
-
 </td>
 
 <td>
-
 ${dias}
-
 </td>
 
 <td>
