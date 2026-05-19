@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Biblioteca Padre Juan Tajack</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -20,74 +18,57 @@ box-sizing:border-box;
 body{
 font-family:'Segoe UI',sans-serif;
 background:#eef3f8;
-color:#222;
 overflow-x:hidden;
-}
-
-/* MENU BUTTON */
-
-#menuBtn{
-position:fixed;
-top:20px;
-left:20px;
-background:#003b5c;
-color:white;
-width:55px;
-height:55px;
-border-radius:14px;
-display:none;
-align-items:center;
-justify-content:center;
-font-size:30px;
-cursor:pointer;
-z-index:1200;
-box-shadow:
-0 5px 15px rgba(0,0,0,0.2);
-transition:0.3s;
-}
-
-#menuBtn:hover{
-background:#005b8f;
+color:#222;
 }
 
 /* LOGIN */
 
 #loginBox{
 max-width:520px;
-margin:40px auto;
+margin:70px auto;
 background:white;
-padding:55px;
 border-radius:28px;
+overflow:hidden;
 box-shadow:
-0 15px 40px rgba(0,0,0,0.08);
-border-top:8px solid #003b5c;
+0 15px 45px rgba(0,0,0,0.08);
 }
 
-#loginBox h1{
-font-size:72px;
+.login-top{
+background:linear-gradient(
+90deg,
+#001b2e,
+#005b8f
+);
+padding:40px 25px;
 text-align:center;
-margin-bottom:20px;
-color:#002b45;
-font-weight:900;
+color:white;
+}
+
+.login-top h1{
+font-size:52px;
 line-height:1.1;
+font-weight:900;
+margin-bottom:15px;
 }
 
-#loginBox p{
-text-align:center;
-font-size:18px;
-color:#666;
-line-height:1.9;
-margin-bottom:40px;
+.login-top p{
+font-size:17px;
+line-height:1.7;
+font-weight:500;
+}
+
+.login-body{
+padding:40px;
 }
 
 input,
 select{
 width:100%;
 padding:18px;
-margin-top:10px;
 margin-bottom:22px;
-border:1px solid #d0d7de;
 border-radius:14px;
+border:1px solid #d0d7de;
 font-size:16px;
 background:#fafcff;
 }
@@ -122,130 +103,6 @@ button:hover{
 transform:translateY(-2px);
 }
 
-/* SIDEBAR */
-
-.sidebar{
-position:fixed;
-left:0;
-top:0;
-width:290px;
-height:100%;
-background:linear-gradient(
-180deg,
-#001d30,
-#003b5c
-);
-color:white;
-box-shadow:
-5px 0 25px rgba(0,0,0,0.12);
-overflow:auto;
-transition:0.3s;
-z-index:1000;
-}
-
-.sidebar.oculto{
-left:-290px;
-}
-
-.logo{
-padding:40px 25px;
-font-size:32px;
-font-weight:800;
-line-height:1.3;
-text-align:center;
-border-bottom:1px solid rgba(255,255,255,0.12);
-}
-
-.logo::after{
-content:
-"Seminario Mayor Nuestra Señora de Suyapa";
-display:block;
-font-size:14px;
-font-weight:400;
-margin-top:10px;
-opacity:0.8;
-}
-
-.menu-item{
-padding:24px 35px;
-cursor:pointer;
-font-size:17px;
-font-weight:600;
-transition:0.3s;
-border-left:5px solid transparent;
-}
-
-.menu-item:hover{
-background:rgba(255,255,255,0.08);
-border-left:5px solid white;
-padding-left:42px;
-}
-
-/* CONTENT */
-
-.content{
-margin-left:0;
-padding:45px;
-transition:0.3s;
-width:100%;
-}
-
-.content.expandido{
-margin-left:290px;
-width:calc(100% - 290px);
-}
-
-.card{
-background:white;
-padding:40px;
-border-radius:24px;
-box-shadow:
-0 8px 30px rgba(0,0,0,0.06);
-margin-bottom:35px;
-}
-
-.card h1{
-font-size:50px;
-margin-bottom:15px;
-color:#002b45;
-font-weight:800;
-}
-
-.card h2{
-font-size:28px;
-margin-bottom:20px;
-color:#005b8f;
-font-weight:700;
-}
-
-/* TABLES */
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:25px;
-overflow:hidden;
-border-radius:16px;
-}
-
-th{
-background:#003b5c;
-color:white;
-padding:18px;
-font-size:15px;
-font-weight:700;
-}
-
-td{
-padding:18px;
-border-bottom:1px solid #eee;
-background:white;
-font-size:15px;
-text-align:center;
-}
-
-/* BUTTONS */
-
 .btn-verde{
 background:#2e7d32;
 }
@@ -260,7 +117,218 @@ background:#f39c12;
 margin-top:12px;
 }
 
-/* USERS */
+.recuperar{
+margin-top:18px;
+text-align:center;
+color:#005b8f;
+font-weight:600;
+cursor:pointer;
+}
+
+/* TOPBAR */
+
+.topbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:85px;
+background:linear-gradient(
+90deg,
+#001b2e,
+#003b5c
+);
+display:none;
+align-items:center;
+padding:0 25px;
+z-index:2000;
+box-shadow:
+0 4px 20px rgba(0,0,0,0.15);
+}
+
+.topbar-title{
+color:white;
+font-size:32px;
+font-weight:800;
+margin-left:25px;
+}
+
+#menuBtn{
+background:rgba(255,255,255,0.12);
+width:58px;
+height:58px;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+cursor:pointer;
+color:white;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+top:85px;
+left:0;
+width:300px;
+height:calc(100% - 85px);
+background:linear-gradient(
+180deg,
+#001b2e,
+#003b5c
+);
+color:white;
+transition:0.3s;
+overflow:auto;
+z-index:1500;
+}
+
+.sidebar.oculto{
+left:-300px;
+}
+
+.logo{
+padding:35px 25px;
+text-align:center;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo h2{
+font-size:28px;
+font-weight:800;
+line-height:1.3;
+}
+
+.logo p{
+margin-top:12px;
+font-size:14px;
+opacity:0.85;
+line-height:1.7;
+}
+
+.menu-item{
+padding:24px 35px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+border-left:5px solid transparent;
+}
+
+.menu-item:hover{
+background:rgba(255,255,255,0.08);
+border-left:5px solid white;
+padding-left:45px;
+}
+
+/* CONTENT */
+
+.content{
+margin-top:100px;
+padding:35px;
+transition:0.3s;
+width:100%;
+}
+
+.content.expandido{
+margin-left:300px;
+width:calc(100% - 300px);
+}
+
+/* CARD */
+
+.card{
+background:white;
+border-radius:28px;
+padding:40px;
+box-shadow:
+0 10px 35px rgba(0,0,0,0.06);
+margin-bottom:35px;
+}
+
+.card h1{
+font-size:54px;
+font-weight:900;
+line-height:1.1;
+color:#002b45;
+margin-bottom:20px;
+}
+
+.card h2{
+font-size:30px;
+color:#005b8f;
+margin-bottom:18px;
+font-weight:800;
+}
+
+.card p{
+font-size:19px;
+line-height:1.9;
+color:#444;
+}
+
+/* VISITOR */
+
+.info-grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+margin-top:35px;
+}
+
+.info-box{
+background:#f4f8fc;
+padding:30px;
+border-radius:22px;
+border-left:7px solid #005b8f;
+}
+
+.info-box h3{
+font-size:24px;
+margin-bottom:15px;
+color:#003b5c;
+font-weight:800;
+}
+
+.info-box p{
+font-size:18px;
+line-height:1.9;
+}
+
+.info-list{
+padding-left:20px;
+margin-top:15px;
+}
+
+.info-list li{
+margin-bottom:15px;
+font-size:18px;
+line-height:1.8;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th{
+background:#003b5c;
+color:white;
+padding:15px;
+}
+
+td{
+padding:15px;
+background:white;
+border-bottom:1px solid #eee;
+text-align:center;
+}
 
 .usuario-item{
 background:#f4f7fb;
@@ -268,13 +336,7 @@ padding:18px;
 margin-top:8px;
 border-radius:12px;
 cursor:pointer;
-transition:0.25s;
 font-weight:600;
-}
-
-.usuario-item:hover{
-background:#dceaf5;
-transform:translateX(4px);
 }
 
 .usuario-box{
@@ -285,40 +347,29 @@ margin-top:25px;
 border-left:7px solid #003b5c;
 }
 
-/* VISITOR */
-
-.info-biblioteca{
-line-height:2;
-font-size:18px;
-color:#444;
-}
-
-.info-biblioteca h2{
-margin-top:35px;
-font-size:30px;
-color:#003b5c;
-}
-
-.info-biblioteca ul{
-margin-left:30px;
-margin-top:15px;
-}
-
-.info-biblioteca li{
-margin-bottom:12px;
-}
-
-/* RESPONSIVE */
+/* MOBILE */
 
 @media(max-width:900px){
+
+.login-top h1{
+font-size:42px;
+}
+
+.card h1{
+font-size:40px;
+}
 
 .content.expandido{
 margin-left:0;
 width:100%;
 }
 
-#loginBox h1{
-font-size:54px;
+.sidebar{
+width:280px;
+}
+
+.topbar-title{
+font-size:22px;
 }
 
 }
@@ -329,26 +380,23 @@ font-size:54px;
 
 <body>
 
-<div
-id="menuBtn"
-onclick="toggleMenu()">
-
-☰
-
-</div>
-
 <!-- LOGIN -->
 
 <div id="loginBox">
+
+<div class="login-top">
 
 <h1>
 Biblioteca Padre Juan Tajack
 </h1>
 
 <p>
-Sistema bibliotecario del
 Seminario Mayor Nuestra Señora de Suyapa
 </p>
+
+</div>
+
+<div class="login-body">
 
 <select id="tipoIngreso">
 
@@ -376,6 +424,34 @@ placeholder="Contraseña bibliotecario">
 Ingresar
 </button>
 
+<p
+class="recuperar"
+onclick="recuperarClave()">
+
+¿Olvidaste tu contraseña?
+
+</p>
+
+</div>
+
+</div>
+
+<!-- TOPBAR -->
+
+<div class="topbar" id="topbar">
+
+<div
+id="menuBtn"
+onclick="toggleMenu()">
+
+☰
+
+</div>
+
+<div class="topbar-title">
+Biblioteca Padre Juan Tajack
+</div>
+
 </div>
 
 <!-- SISTEMA -->
@@ -389,7 +465,15 @@ style="display:none;">
 <div class="sidebar">
 
 <div class="logo">
+
+<h2>
 Biblioteca Padre Juan Tajack
+</h2>
+
+<p>
+Seminario Mayor Nuestra Señora de Suyapa
+</p>
+
 </div>
 
 <div
@@ -441,16 +525,84 @@ Cerrar sesión
 Biblioteca Padre Juan Tajack
 </h1>
 
-<h2>
-Registro de Usuarios
-</h2>
+<p>
 
-<p class="info-biblioteca">
-
-Sistema de administración de usuarios
-de la Biblioteca Padre Juan Tajack.
+La Biblioteca Padre Juan Tajack es un espacio académico
+destinado al estudio, investigación, lectura y formación
+intelectual de los seminaristas y visitantes.
 
 </p>
+
+<div class="info-grid">
+
+<div class="info-box">
+
+<h3>
+¿Qué es una biblioteca?
+</h3>
+
+<p>
+
+Una biblioteca es un lugar dedicado a conservar,
+organizar y facilitar el acceso al conocimiento.
+
+</p>
+
+</div>
+
+<div class="info-box">
+
+<h3>
+Secciones
+</h3>
+
+<ul class="info-list">
+
+<li>Recepción e información</li>
+<li>Área de préstamos</li>
+<li>Sala de revistas</li>
+<li>Sala de lectura</li>
+<li>Libros de Filosofía</li>
+<li>Libros de Teología</li>
+
+</ul>
+
+</div>
+
+<div class="info-box">
+
+<h3>
+Reglamento
+</h3>
+
+<ul class="info-list">
+
+<li>Mantener silencio y orden</li>
+<li>Cuidar libros y mobiliario</li>
+<li>Respetar fechas de devolución</li>
+<li>Multa de L. 5 diarios por retraso</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- USUARIOS -->
+
+<div
+id="usuarios"
+style="display:none;">
+
+<div class="card">
+
+<h1>
+Registro de Usuario
+</h1>
 
 <input
 type="text"
@@ -463,6 +615,10 @@ id="identidad"
 placeholder="Número de identidad">
 
 <select id="etapa">
+
+<option value="">
+Seleccione etapa
+</option>
 
 <option>
 Configuradora
@@ -478,21 +634,9 @@ Discipular
 Guardar Usuario
 </button>
 
-</div>
-
-</div>
-
-<!-- USUARIOS -->
-
-<div
-id="usuarios"
-style="display:none;">
-
-<div class="card">
-
-<h1>
+<h2 style="margin-top:40px;">
 Buscar Usuario
-</h1>
+</h2>
 
 <input
 type="text"
@@ -534,10 +678,6 @@ placeholder="Libro">
 type="text"
 id="usuarioPrestamo"
 placeholder="Usuario">
-
-<label>
-Fecha devolución
-</label>
 
 <input
 type="date"
@@ -587,7 +727,7 @@ const SUPABASE_URL =
 "https://wizrwignblrgkhyvtlyl.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ";
+"TU_SUPABASE_KEY";
 
 const supabaseClient =
 supabase.createClient(
@@ -615,6 +755,28 @@ content.classList.toggle('expandido');
 
 }
 
+/* MOSTRAR */
+
+function mostrar(id){
+
+document.getElementById(
+'inicio'
+).style.display='none';
+
+document.getElementById(
+'usuarios'
+).style.display='none';
+
+document.getElementById(
+'prestamos'
+).style.display='none';
+
+document.getElementById(
+id
+).style.display='block';
+
+}
+
 /* LOGIN */
 
 async function ingresarSistema(){
@@ -626,7 +788,13 @@ document.getElementById(
 
 if(tipo === 'visitante'){
 
-entrarVisitante();
+modoVisitante = true;
+
+document.getElementById(
+'prestamosMenu'
+).style.display='none';
+
+entrarSistema();
 
 return;
 
@@ -652,31 +820,19 @@ password:clave
 
 if(error){
 
-alert('Correo o contraseña incorrectos');
+alert(
+'Correo o contraseña incorrectos'
+);
 
 return;
 
 }
 
-document.getElementById(
-'loginBox'
-).style.display='none';
-
-document.getElementById(
-'sistema'
-).style.display='block';
-
-document.getElementById(
-'menuBtn'
-).style.display='flex';
+entrarSistema();
 
 }
 
-/* VISITANTE */
-
-function entrarVisitante(){
-
-modoVisitante = true;
+function entrarSistema(){
 
 document.getElementById(
 'loginBox'
@@ -687,77 +843,56 @@ document.getElementById(
 ).style.display='block';
 
 document.getElementById(
-'menuBtn'
+'topbar'
 ).style.display='flex';
 
+}
+
+/* RECUPERAR */
+
+async function recuperarClave(){
+
+const correo =
 document.getElementById(
-'prestamosMenu'
-).style.display='none';
+'correo'
+).value;
 
-document.getElementById(
-'inicio'
-).innerHTML = `
+if(!correo){
 
-<div class="card info-biblioteca">
+alert(
+'Ingrese su correo'
+);
 
-<h1>
-Biblioteca Padre Juan Tajack
-</h1>
-
-<p>
-
-La Biblioteca Padre Juan Tajack es un
-espacio académico destinado al estudio,
-lectura e investigación.
-
-</p>
-
-<h2>
-Secciones
-</h2>
-
-<ul>
-
-<li>Recepción y préstamos</li>
-<li>Sala de revistas</li>
-<li>Sala de libros</li>
-<li>Libros de Filosofía</li>
-<li>Libros de Teología</li>
-
-</ul>
-
-<h2>
-Reglamento
-</h2>
-
-<ul>
-
-<li>Guardar silencio y orden</li>
-<li>No dañar libros</li>
-<li>Devolver libros a tiempo</li>
-<li>Multa de L. 5 diarios por retraso</li>
-
-</ul>
-
-</div>
-
-`;
+return;
 
 }
 
-/* MOSTRAR */
+const { error } =
+await supabaseClient.auth.resetPasswordForEmail(
+correo,
+{
+redirectTo:
+window.location.origin
+}
+);
 
-function mostrar(id){
+if(error){
 
-document.getElementById('inicio').style.display='none';
-document.getElementById('usuarios').style.display='none';
-document.getElementById('prestamos').style.display='none';
+alert(
+'No se pudo enviar el correo'
+);
 
-document.getElementById(id).style.display='block';
+return;
 
 }
 
-/* CARGAR */
+alert(
+'Revisa tu correo para cambiar contraseña'
+);
+
+}
+
+/* USUARIOS */
 
 async function cargarUsuarios(){
 
@@ -771,36 +906,26 @@ usuarios = data || [];
 
 }
 
-async function cargarPrestamos(){
-
-const { data } =
-await supabaseClient
-.from('prestamos')
-.select('*')
-.order('id',{ascending:false});
-
-prestamos = data || [];
-
-renderPrestamos();
-
-}
-
-/* GUARDAR */
-
 async function guardarUsuario(){
 
 const nombre =
-document.getElementById('nombre').value;
+document.getElementById(
+'nombre'
+).value;
 
 const identidad =
-document.getElementById('identidad').value;
+document.getElementById(
+'identidad'
+).value;
 
 const etapa =
-document.getElementById('etapa').value;
+document.getElementById(
+'etapa'
+).value;
 
-if(!nombre || !identidad){
+if(!nombre || !identidad || !etapa){
 
-alert('Complete los datos');
+alert('Complete todos los datos');
 return;
 
 }
@@ -823,14 +948,13 @@ return;
 
 document.getElementById('nombre').value='';
 document.getElementById('identidad').value='';
+document.getElementById('etapa').value='';
 
 await cargarUsuarios();
 
 alert('Usuario guardado');
 
 }
-
-/* BUSCAR */
 
 function buscarUsuarios(){
 
@@ -868,8 +992,6 @@ ${u.nombre}
 });
 
 }
-
-/* MOSTRAR USUARIO */
 
 function mostrarUsuario(index){
 
@@ -958,8 +1080,6 @@ ${filas}
 
 }
 
-/* ELIMINAR */
-
 async function eliminarUsuario(id){
 
 const confirmar =
@@ -989,8 +1109,6 @@ document.getElementById(
 alert('Usuario eliminado');
 
 }
-
-/* EDITAR */
 
 async function editarUsuario(id){
 
@@ -1040,7 +1158,21 @@ alert('Usuario actualizado');
 
 }
 
-/* PRESTAMO */
+/* PRESTAMOS */
+
+async function cargarPrestamos(){
+
+const { data } =
+await supabaseClient
+.from('prestamos')
+.select('*')
+.order('id',{ascending:false});
+
+prestamos = data || [];
+
+renderPrestamos();
+
+}
 
 async function registrarPrestamo(){
 
@@ -1093,8 +1225,6 @@ alert('Préstamo registrado');
 
 }
 
-/* DEVOLVER */
-
 async function devolverLibro(id){
 
 const { error } =
@@ -1117,8 +1247,6 @@ await cargarPrestamos();
 alert('Libro devuelto');
 
 }
-
-/* TABLA */
 
 function renderPrestamos(){
 
@@ -1212,7 +1340,7 @@ document
 await cargarUsuarios();
 await cargarPrestamos();
 
-};
+}
 
 </script>
 
