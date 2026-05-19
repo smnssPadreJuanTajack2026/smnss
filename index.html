@@ -35,7 +35,7 @@ color:white;
 width:55px;
 height:55px;
 border-radius:14px;
-display:flex;
+display:none;
 align-items:center;
 justify-content:center;
 font-size:30px;
@@ -54,7 +54,7 @@ background:#005b8f;
 
 #loginBox{
 max-width:520px;
-margin:90px auto;
+margin:40px auto;
 background:white;
 padding:55px;
 border-radius:28px;
@@ -64,11 +64,12 @@ border-top:8px solid #003b5c;
 }
 
 #loginBox h1{
-font-size:52px;
+font-size:72px;
 text-align:center;
-margin-bottom:10px;
+margin-bottom:20px;
 color:#002b45;
-font-weight:800;
+font-weight:900;
+line-height:1.1;
 }
 
 #loginBox p{
@@ -316,6 +317,10 @@ margin-left:0;
 width:100%;
 }
 
+#loginBox h1{
+font-size:54px;
+}
+
 }
 
 </style>
@@ -324,8 +329,12 @@ width:100%;
 
 <body>
 
-<div id="menuBtn" onclick="toggleMenu()">
+<div
+id="menuBtn"
+onclick="toggleMenu()">
+
 ☰
+
 </div>
 
 <!-- LOGIN -->
@@ -657,6 +666,10 @@ document.getElementById(
 'sistema'
 ).style.display='block';
 
+document.getElementById(
+'menuBtn'
+).style.display='flex';
+
 }
 
 /* VISITANTE */
@@ -672,6 +685,10 @@ document.getElementById(
 document.getElementById(
 'sistema'
 ).style.display='block';
+
+document.getElementById(
+'menuBtn'
+).style.display='flex';
 
 document.getElementById(
 'prestamosMenu'
