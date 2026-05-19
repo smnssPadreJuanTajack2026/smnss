@@ -23,6 +23,32 @@ background:#eef3f8;
 color:#222;
 }
 
+/* BOTON MENU */
+
+#menuBtn{
+position:fixed;
+top:20px;
+left:20px;
+background:#003b5c;
+color:white;
+width:55px;
+height:55px;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+cursor:pointer;
+z-index:1200;
+box-shadow:
+0 5px 15px rgba(0,0,0,0.2);
+transition:0.3s;
+}
+
+#menuBtn:hover{
+background:#005b8f;
+}
+
 /* LOGIN */
 
 #loginBox{
@@ -42,7 +68,6 @@ text-align:center;
 margin-bottom:10px;
 color:#002b45;
 font-weight:800;
-letter-spacing:1px;
 }
 
 #loginBox p{
@@ -63,7 +88,6 @@ border:1px solid #d0d7de;
 border-radius:14px;
 font-size:16px;
 background:#fafcff;
-transition:0.3s;
 }
 
 input:focus,
@@ -90,20 +114,17 @@ font-size:18px;
 font-weight:700;
 cursor:pointer;
 transition:0.3s;
-letter-spacing:0.5px;
 }
 
 button:hover{
 transform:translateY(-2px);
-box-shadow:
-0 8px 20px rgba(0,0,0,0.15);
 }
 
 /* SIDEBAR */
 
 .sidebar{
 position:fixed;
-left:0;
+left:-290px;
 top:0;
 width:290px;
 height:100%;
@@ -116,6 +137,12 @@ color:white;
 box-shadow:
 5px 0 25px rgba(0,0,0,0.12);
 overflow:auto;
+transition:0.3s;
+z-index:1000;
+}
+
+.sidebar.active{
+left:0;
 }
 
 .logo{
@@ -125,7 +152,6 @@ font-weight:800;
 line-height:1.3;
 text-align:center;
 border-bottom:1px solid rgba(255,255,255,0.12);
-letter-spacing:1px;
 }
 
 .logo::after{
@@ -135,7 +161,6 @@ display:block;
 font-size:14px;
 font-weight:400;
 margin-top:10px;
-line-height:1.8;
 opacity:0.8;
 }
 
@@ -157,8 +182,9 @@ padding-left:42px;
 /* CONTENT */
 
 .content{
-margin-left:290px;
+margin-left:0;
 padding:45px;
+transition:0.3s;
 }
 
 .card{
@@ -280,6 +306,10 @@ margin-bottom:12px;
 
 <body>
 
+<div id="menuBtn" onclick="toggleMenu()">
+☰
+</div>
+
 <!-- LOGIN -->
 
 <div id="loginBox">
@@ -289,10 +319,8 @@ Biblioteca Padre Juan Tajack
 </h1>
 
 <p>
-
 Sistema bibliotecario del
 Seminario Mayor Nuestra Señora de Suyapa
-
 </p>
 
 <select id="tipoIngreso">
@@ -334,9 +362,7 @@ style="display:none;">
 <div class="sidebar">
 
 <div class="logo">
-
 Biblioteca Padre Juan Tajack
-
 </div>
 
 <div
@@ -542,6 +568,17 @@ let usuarios = [];
 let prestamos = [];
 let modoVisitante = false;
 
+/* MENU */
+
+function toggleMenu(){
+
+document
+.querySelector('.sidebar')
+.classList
+.toggle('active');
+
+}
+
 /* LOGIN */
 
 async function ingresarSistema(){
@@ -627,8 +664,7 @@ Biblioteca Padre Juan Tajack
 
 La Biblioteca Padre Juan Tajack es un
 espacio académico destinado al estudio,
-lectura e investigación de la comunidad
-del Seminario Mayor Nuestra Señora de Suyapa.
+lectura e investigación.
 
 </p>
 
@@ -669,21 +705,11 @@ Reglamento
 
 function mostrar(id){
 
-document.getElementById(
-'inicio'
-).style.display='none';
+document.getElementById('inicio').style.display='none';
+document.getElementById('usuarios').style.display='none';
+document.getElementById('prestamos').style.display='none';
 
-document.getElementById(
-'usuarios'
-).style.display='none';
-
-document.getElementById(
-'prestamos'
-).style.display='none';
-
-document.getElementById(
-id
-).style.display='block';
+document.getElementById(id).style.display='block';
 
 }
 
@@ -720,24 +746,17 @@ renderPrestamos();
 async function guardarUsuario(){
 
 const nombre =
-document.getElementById(
-'nombre'
-).value;
+document.getElementById('nombre').value;
 
 const identidad =
-document.getElementById(
-'identidad'
-).value;
+document.getElementById('identidad').value;
 
 const etapa =
-document.getElementById(
-'etapa'
-).value;
+document.getElementById('etapa').value;
 
 if(!nombre || !identidad){
 
 alert('Complete los datos');
-
 return;
 
 }
@@ -754,7 +773,6 @@ etapa
 if(error){
 
 alert('Error al guardar');
-
 return;
 
 }
@@ -841,9 +859,7 @@ document.getElementById(
 
 <div class="usuario-box">
 
-<h2>
-${usuario.nombre}
-</h2>
+<h2>${usuario.nombre}</h2>
 
 <p>
 <b>Identidad:</b>
@@ -916,7 +932,6 @@ await supabaseClient
 if(error){
 
 alert('No se pudo eliminar');
-
 return;
 
 }
@@ -971,7 +986,6 @@ etapa
 if(error){
 
 alert('Error al editar');
-
 return;
 
 }
@@ -987,24 +1001,16 @@ alert('Usuario actualizado');
 async function registrarPrestamo(){
 
 const codigo =
-document.getElementById(
-'codigo'
-).value;
+document.getElementById('codigo').value;
 
 const libro =
-document.getElementById(
-'libro'
-).value;
+document.getElementById('libro').value;
 
 const usuario =
-document.getElementById(
-'usuarioPrestamo'
-).value;
+document.getElementById('usuarioPrestamo').value;
 
 const fecha =
-document.getElementById(
-'fecha'
-).value;
+document.getElementById('fecha').value;
 
 if(
 !codigo ||
@@ -1014,7 +1020,6 @@ if(
 ){
 
 alert('Complete los datos');
-
 return;
 
 }
@@ -1034,7 +1039,6 @@ dias_retraso:0
 if(error){
 
 alert('Error al guardar préstamo');
-
 return;
 
 }
@@ -1060,7 +1064,6 @@ estado:'Devuelto'
 if(error){
 
 alert('Error al devolver');
-
 return;
 
 }
@@ -1145,7 +1148,7 @@ tabla.innerHTML = html;
 
 }
 
-/* CERRAR SESION */
+/* CERRAR */
 
 function cerrarSesion(){
 
@@ -1158,7 +1161,6 @@ location.reload();
 window.onload = async function(){
 
 await cargarUsuarios();
-
 await cargarPrestamos();
 
 };
