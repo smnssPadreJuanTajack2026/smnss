@@ -169,7 +169,7 @@ display:block;
 border:1px solid #ccc;
 background:white;
 border-radius:8px;
-max-height:150px;
+max-height:180px;
 overflow-y:auto;
 display:none;
 margin-top:5px;
@@ -334,18 +334,19 @@ class="panel">
 <div class="card">
 
 <h2>
-Usuarios Registrados
+Buscar Usuario
 </h2>
 
-<select
-id="listaUsuarios"
-onchange="mostrarInformacionUsuario()">
+<input
+type="text"
+id="buscarUsuarioHistorial"
+placeholder="Buscar usuario"
+onkeyup="buscarUsuarioHistorial()">
 
-<option value="">
-Seleccione usuario
-</option>
-
-</select>
+<div
+class="lista-busqueda"
+id="listaBusquedaHistorial">
+</div>
 
 <div id="informacionUsuario"></div>
 
@@ -475,6 +476,7 @@ password:clave
 if(error){
 
 alert('Credenciales incorrectas');
+
 return;
 
 }
@@ -757,6 +759,7 @@ etapa===''
 ){
 
 alert('Complete todos los campos');
+
 return;
 
 }
@@ -775,11 +778,16 @@ etapa:etapa
 if(error){
 
 alert('Error');
+
 return;
 
 }
 
 alert('Usuario guardado');
+
+document.getElementById('nombre').value='';
+document.getElementById('identidad').value='';
+document.getElementById('etapa').value='';
 
 await cargarUsuarios();
 
@@ -794,21 +802,6 @@ await supabaseClient
 .order('id');
 
 usuarios = data || [];
-
-let lista =
-document.getElementById('listaUsuarios');
-
-lista.innerHTML =
-'<option value="">Seleccione usuario</option>';
-
-usuarios.forEach(function(usuario,index){
-
-lista.innerHTML +=
-'<option value="'+index+'">'+
-usuario.nombre+
-'</option>';
-
-});
 
 }
 
@@ -828,6 +821,7 @@ lista.innerHTML='';
 if(texto===''){
 
 lista.style.display='none';
+
 return;
 
 }
@@ -892,6 +886,7 @@ fecha===''
 ){
 
 alert('Complete todos los campos');
+
 return;
 
 }
@@ -913,11 +908,17 @@ dias_retraso:0
 if(error){
 
 alert('Error');
+
 return;
 
 }
 
 alert('Préstamo registrado');
+
+document.getElementById('codigo').value='';
+document.getElementById('libro').value='';
+document.getElementById('buscarUsuario').value='';
+document.getElementById('usuarioPrestamo').value='';
 
 await cargarPrestamos();
 
@@ -1033,33 +1034,79 @@ estado:'Devuelto'
 
 if(error){
 
-alert('Error');
+console.log(error);
+
+alert('Error al devolver');
+
 return;
 
 }
 
-alert('Libro devuelto');
-
 await cargarPrestamos();
-
-mostrarInformacionUsuario();
-
-}
-
-function mostrarInformacionUsuario(){
-
-let index =
-document.getElementById('listaUsuarios').value;
-
-if(index===''){
 
 document.getElementById(
 'informacionUsuario'
 ).innerHTML='';
 
+alert('Libro devuelto');
+
+}
+
+function buscarUsuarioHistorial(){
+
+let texto =
+document
+.getElementById('buscarUsuarioHistorial')
+.value
+.toLowerCase();
+
+let lista =
+document.getElementById(
+'listaBusquedaHistorial'
+);
+
+lista.innerHTML='';
+
+if(texto===''){
+
+lista.style.display='none';
+
 return;
 
 }
+
+usuarios.forEach(function(usuario,index){
+
+if(
+usuario.nombre
+.toLowerCase()
+.includes(texto)
+){
+
+lista.innerHTML +=
+'<div class="item-usuario" onclick="mostrarUsuarioDirecto('+index+')">'+
+usuario.nombre+
+'</div>';
+
+}
+
+});
+
+lista.style.display='block';
+
+}
+
+function mostrarUsuarioDirecto(index){
+
+document.getElementById(
+'listaBusquedaHistorial'
+).style.display='none';
+
+mostrarInformacionUsuario(index);
+
+}
+
+function mostrarInformacionUsuario(index){
 
 let usuario = usuarios[index];
 
@@ -1198,6 +1245,7 @@ etapa:nuevaEtapa
 if(error){
 
 alert('Error');
+
 return;
 
 }
@@ -1206,7 +1254,7 @@ alert('Usuario actualizado');
 
 await cargarUsuarios();
 
-mostrarInformacionUsuario();
+mostrarInformacionUsuario(index);
 
 }
 
@@ -1233,18 +1281,21 @@ await supabaseClient
 
 if(error){
 
-alert('Error');
+console.log(error);
+
+alert('Error al eliminar');
+
 return;
 
 }
-
-alert('Usuario eliminado');
 
 await cargarUsuarios();
 
 document.getElementById(
 'informacionUsuario'
 ).innerHTML='';
+
+alert('Usuario eliminado');
 
 }
 
