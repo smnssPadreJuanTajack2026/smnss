@@ -36,8 +36,7 @@ padding:18px 28px;
 border-radius:14px;
 font-weight:700;
 font-size:16px;
-box-shadow:
-0 8px 20px rgba(0,0,0,0.2);
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
 opacity:0;
 pointer-events:none;
 transition:0.4s;
@@ -53,27 +52,22 @@ transform:translateY(-10px);
 
 #loginBox{
 max-width:520px;
-margin:70px auto;
+margin:60px auto;
 background:white;
 border-radius:28px;
 overflow:hidden;
-box-shadow:
-0 15px 45px rgba(0,0,0,0.08);
+box-shadow:0 15px 45px rgba(0,0,0,0.08);
 }
 
 .login-top{
-background:linear-gradient(
-90deg,
-#001b2e,
-#005b8f
-);
+background:linear-gradient(90deg,#001b2e,#005b8f);
 padding:40px 25px;
 text-align:center;
 color:white;
 }
 
 .login-top h1{
-font-size:52px;
+font-size:50px;
 line-height:1.1;
 font-weight:900;
 margin-bottom:15px;
@@ -105,8 +99,7 @@ select:focus{
 outline:none;
 border:1px solid #005b8f;
 background:white;
-box-shadow:
-0 0 0 4px rgba(0,91,143,0.1);
+box-shadow:0 0 0 4px rgba(0,91,143,0.1);
 }
 
 button{
@@ -114,11 +107,7 @@ width:100%;
 padding:18px;
 border:none;
 border-radius:14px;
-background:linear-gradient(
-90deg,
-#002b45,
-#005b8f
-);
+background:linear-gradient(90deg,#002b45,#005b8f);
 color:white;
 font-size:18px;
 font-weight:700;
@@ -152,22 +141,17 @@ top:0;
 left:0;
 width:100%;
 height:85px;
-background:linear-gradient(
-90deg,
-#001b2e,
-#003b5c
-);
+background:linear-gradient(90deg,#001b2e,#003b5c);
 display:none;
 align-items:center;
 padding:0 25px;
 z-index:2000;
-box-shadow:
-0 4px 20px rgba(0,0,0,0.15);
+box-shadow:0 4px 20px rgba(0,0,0,0.15);
 }
 
 .topbar-title{
 color:white;
-font-size:32px;
+font-size:30px;
 font-weight:800;
 margin-left:25px;
 }
@@ -193,11 +177,7 @@ top:85px;
 left:0;
 width:300px;
 height:calc(100% - 85px);
-background:linear-gradient(
-180deg,
-#001b2e,
-#003b5c
-);
+background:linear-gradient(180deg,#001b2e,#003b5c);
 color:white;
 transition:0.3s;
 overflow:auto;
@@ -262,13 +242,12 @@ width:calc(100% - 300px);
 background:white;
 border-radius:28px;
 padding:40px;
-box-shadow:
-0 10px 35px rgba(0,0,0,0.06);
+box-shadow:0 10px 35px rgba(0,0,0,0.06);
 margin-bottom:35px;
 }
 
 .card h1{
-font-size:54px;
+font-size:52px;
 font-weight:900;
 line-height:1.1;
 color:#002b45;
@@ -283,7 +262,7 @@ font-weight:800;
 }
 
 .card p{
-font-size:19px;
+font-size:18px;
 line-height:1.9;
 color:#444;
 }
@@ -292,8 +271,7 @@ color:#444;
 
 .info-grid{
 display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(280px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:25px;
 margin-top:35px;
 }
@@ -383,8 +361,7 @@ height:220px;
 background:white;
 padding:15px;
 border-radius:18px;
-box-shadow:
-0 8px 25px rgba(0,0,0,0.08);
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
 }
 
 /* MOBILE */
@@ -422,8 +399,6 @@ font-size:22px;
 
 <div id="toast"></div>
 
-<!-- LOGIN -->
-
 <div id="loginBox">
 
 <div class="login-top">
@@ -452,15 +427,9 @@ Visitante
 
 </select>
 
-<input
-type="email"
-id="correo"
-placeholder="Correo bibliotecario">
+<input type="email" id="correo" placeholder="Correo bibliotecario">
 
-<input
-type="password"
-id="clave"
-placeholder="Contraseña bibliotecario">
+<input type="password" id="clave" placeholder="Contraseña bibliotecario">
 
 <button onclick="ingresarSistema()">
 Ingresar
@@ -470,16 +439,10 @@ Ingresar
 
 </div>
 
-<!-- TOPBAR -->
-
 <div class="topbar" id="topbar">
 
-<div
-id="menuBtn"
-onclick="toggleMenu()">
-
+<div id="menuBtn" onclick="toggleMenu()">
 ☰
-
 </div>
 
 <div class="topbar-title">
@@ -488,13 +451,7 @@ Biblioteca Padre Juan Tajack
 
 </div>
 
-<!-- SISTEMA -->
-
-<div
-id="sistema"
-style="display:none;">
-
-<!-- SIDEBAR -->
+<div id="sistema" style="display:none;">
 
 <div class="sidebar">
 
@@ -510,46 +467,25 @@ Seminario Mayor Nuestra Señora de Suyapa
 
 </div>
 
-<div
-class="menu-item"
-onclick="mostrar('inicio')">
-
+<div class="menu-item" onclick="mostrar('inicio')">
 Inicio
-
 </div>
 
-<div
-class="menu-item"
-onclick="mostrar('usuarios')">
-
+<div class="menu-item" onclick="mostrar('usuarios')">
 Usuarios
-
 </div>
 
-<div
-class="menu-item"
-id="prestamosMenu"
-onclick="mostrar('prestamos')">
-
+<div class="menu-item" id="prestamosMenu" onclick="mostrar('prestamos')">
 Préstamos
-
 </div>
 
-<div
-class="menu-item"
-onclick="cerrarSesion()">
-
+<div class="menu-item" onclick="cerrarSesion()">
 Cerrar sesión
-
 </div>
 
 </div>
-
-<!-- CONTENT -->
 
 <div class="content">
-
-<!-- INICIO -->
 
 <div id="inicio">
 
@@ -562,7 +498,9 @@ Biblioteca Padre Juan Tajack
 <p>
 
 La Biblioteca Padre Juan Tajack es un espacio académico
-destinado al estudio, investigación y formación intelectual.
+destinado al estudio, investigación y formación intelectual
+de los seminaristas y visitantes del Seminario Mayor
+Nuestra Señora de Suyapa.
 
 </p>
 
@@ -576,8 +514,12 @@ destinado al estudio, investigación y formación intelectual.
 
 <p>
 
-Una biblioteca es un lugar dedicado a conservar,
-organizar y facilitar el acceso al conocimiento.
+La Biblioteca Padre Juan Tajack es un espacio académico
+y formativo destinado al estudio, la investigación y el
+crecimiento intelectual de toda la comunidad educativa.
+Aquí los estudiantes pueden acceder a libros, revistas y
+materiales especializados que fortalecen su formación
+humana, filosófica, teológica y espiritual.
 
 </p>
 
@@ -586,15 +528,25 @@ organizar y facilitar el acceso al conocimiento.
 <div class="info-box">
 
 <h3>
-Secciones
+Secciones de la biblioteca
 </h3>
+
+<p>
+
+La biblioteca cuenta con diferentes áreas organizadas
+para facilitar el aprendizaje y la consulta académica.
+Entre ellas se encuentran la recepción e información,
+la sala de lectura, el área de préstamos y las secciones
+especializadas de Filosofía y Teología.
+
+</p>
 
 <ul class="info-list">
 
 <li>Recepción e información</li>
 <li>Área de préstamos</li>
-<li>Sala de revistas</li>
 <li>Sala de lectura</li>
+<li>Sala de revistas</li>
 <li>Libros de Filosofía</li>
 <li>Libros de Teología</li>
 
@@ -605,8 +557,17 @@ Secciones
 <div class="info-box">
 
 <h3>
-Reglamento
+Reglamento y normas
 </h3>
+
+<p>
+
+Todos los usuarios deben cuidar los libros y el
+mobiliario, mantener silencio dentro de las instalaciones
+y respetar las fechas establecidas para la devolución de
+los préstamos.
+
+</p>
 
 <ul class="info-list">
 
@@ -629,13 +590,11 @@ QR Oficial del Sistema
 
 <p>
 
-Escanea el código QR para acceder rápidamente
-al sistema de la biblioteca.
+Escanea el código QR para ingresar rápidamente al sistema.
 
 </p>
 
-<img
-src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://TU-SITIO.com">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://TU-SITIO.netlify.app">
 
 </div>
 
@@ -645,9 +604,7 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://TU-SI
 
 <!-- USUARIOS -->
 
-<div
-id="usuarios"
-style="display:none;">
+<div id="usuarios" style="display:none;">
 
 <div class="card">
 
@@ -655,15 +612,9 @@ style="display:none;">
 Registro de Usuario
 </h1>
 
-<input
-type="text"
-id="nombre"
-placeholder="Nombre completo">
+<input type="text" id="nombre" placeholder="Nombre completo">
 
-<input
-type="text"
-id="identidad"
-placeholder="Número de identidad">
+<input type="text" id="identidad" placeholder="Número de identidad">
 
 <select id="etapa">
 
@@ -705,9 +656,7 @@ onkeyup="buscarUsuarios()">
 
 <!-- PRESTAMOS -->
 
-<div
-id="prestamos"
-style="display:none;">
+<div id="prestamos" style="display:none;">
 
 <div class="card">
 
@@ -715,24 +664,13 @@ style="display:none;">
 Nuevo Préstamo
 </h1>
 
-<input
-type="text"
-id="codigo"
-placeholder="Código">
+<input type="text" id="codigo" placeholder="Código">
 
-<input
-type="text"
-id="libro"
-placeholder="Libro">
+<input type="text" id="libro" placeholder="Libro">
 
-<input
-type="text"
-id="usuarioPrestamo"
-placeholder="Usuario">
+<input type="text" id="usuarioPrestamo" placeholder="Usuario">
 
-<input
-type="date"
-id="fecha">
+<input type="date" id="fecha">
 
 <button onclick="registrarPrestamo()">
 Registrar Préstamo
@@ -775,10 +713,10 @@ Libros Prestados
 <script>
 
 const SUPABASE_URL =
-"https://TU-PROYECTO.supabase.co";
+"https://wizrwignblrgkhyvtlyl.supabase.co";
 
 const SUPABASE_KEY =
-"TU-ANON-KEY";
+"sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ";
 
 const supabaseClient =
 supabase.createClient(
@@ -790,30 +728,20 @@ let usuarios = [];
 let prestamos = [];
 let modoVisitante = false;
 
-/* TOAST */
-
 function mostrarToast(texto){
 
 const toast =
-document.getElementById(
-'toast'
-);
+document.getElementById('toast');
 
 toast.innerText = texto;
 
 toast.classList.add('show');
 
 setTimeout(()=>{
-
-toast.classList.remove(
-'show'
-);
-
+toast.classList.remove('show');
 },3000);
 
 }
-
-/* MENU */
 
 function toggleMenu(){
 
@@ -829,29 +757,15 @@ content.classList.toggle('expandido');
 
 }
 
-/* MOSTRAR */
-
 function mostrar(id){
 
-document.getElementById(
-'inicio'
-).style.display='none';
+document.getElementById('inicio').style.display='none';
+document.getElementById('usuarios').style.display='none';
+document.getElementById('prestamos').style.display='none';
 
-document.getElementById(
-'usuarios'
-).style.display='none';
-
-document.getElementById(
-'prestamos'
-).style.display='none';
-
-document.getElementById(
-id
-).style.display='block';
+document.getElementById(id).style.display='block';
 
 }
-
-/* SESION */
 
 async function verificarSesion(){
 
@@ -860,17 +774,9 @@ await supabaseClient.auth.getSession();
 
 if(data.session){
 
-document.getElementById(
-'loginBox'
-).style.display='none';
-
-document.getElementById(
-'sistema'
-).style.display='block';
-
-document.getElementById(
-'topbar'
-).style.display='flex';
+document.getElementById('loginBox').style.display='none';
+document.getElementById('sistema').style.display='block';
+document.getElementById('topbar').style.display='flex';
 
 await cargarUsuarios();
 await cargarPrestamos();
@@ -879,57 +785,37 @@ await cargarPrestamos();
 
 }
 
-/* LOGIN */
-
 async function ingresarSistema(){
 
 const tipo =
-document.getElementById(
-'tipoIngreso'
-).value;
+document.getElementById('tipoIngreso').value;
 
 if(tipo === 'visitante'){
 
 modoVisitante = true;
 
-document.getElementById(
-'prestamosMenu'
-).style.display='none';
+document.getElementById('prestamosMenu').style.display='none';
 
-document.getElementById(
-'loginBox'
-).style.display='none';
-
-document.getElementById(
-'sistema'
-).style.display='block';
-
-document.getElementById(
-'topbar'
-).style.display='flex';
+document.getElementById('loginBox').style.display='none';
+document.getElementById('sistema').style.display='block';
+document.getElementById('topbar').style.display='flex';
 
 await cargarUsuarios();
 await cargarPrestamos();
 
 mostrarUsuariosVisitante();
 
-mostrarToast(
-'Bienvenido visitante'
-);
+mostrarToast('Bienvenido visitante');
 
 return;
 
 }
 
 const correo =
-document.getElementById(
-'correo'
-).value.trim();
+document.getElementById('correo').value.trim();
 
 const clave =
-document.getElementById(
-'clave'
-).value.trim();
+document.getElementById('clave').value.trim();
 
 const { error } =
 await supabaseClient.auth.signInWithPassword({
@@ -941,9 +827,7 @@ password:clave
 
 if(error){
 
-mostrarToast(
-'Correo o contraseña incorrectos'
-);
+mostrarToast('Correo o contraseña incorrectos');
 
 return;
 
@@ -951,32 +835,18 @@ return;
 
 modoVisitante = false;
 
-document.getElementById(
-'prestamosMenu'
-).style.display='block';
+document.getElementById('prestamosMenu').style.display='block';
 
-document.getElementById(
-'loginBox'
-).style.display='none';
-
-document.getElementById(
-'sistema'
-).style.display='block';
-
-document.getElementById(
-'topbar'
-).style.display='flex';
+document.getElementById('loginBox').style.display='none';
+document.getElementById('sistema').style.display='block';
+document.getElementById('topbar').style.display='flex';
 
 await cargarUsuarios();
 await cargarPrestamos();
 
-mostrarToast(
-'Bienvenido bibliotecario'
-);
+mostrarToast('Bienvenido bibliotecario');
 
 }
-
-/* USUARIOS */
 
 async function cargarUsuarios(){
 
@@ -993,9 +863,7 @@ usuarios = data || [];
 function mostrarUsuariosVisitante(){
 
 const lista =
-document.getElementById(
-'listaBusqueda'
-);
+document.getElementById('listaBusqueda');
 
 lista.innerHTML='';
 
@@ -1003,8 +871,7 @@ usuarios.forEach((u,index)=>{
 
 lista.innerHTML += `
 
-<div
-class="usuario-item"
+<div class="usuario-item"
 onclick="mostrarUsuario(${index})">
 
 ${u.nombre}
@@ -1021,40 +888,29 @@ async function guardarUsuario(){
 
 if(modoVisitante){
 
-mostrarToast(
-'Solo bibliotecario puede registrar'
-);
+mostrarToast('Solo bibliotecario');
 
 return;
 
 }
 
 const nombre =
-document.getElementById(
-'nombre'
-).value;
+document.getElementById('nombre').value;
 
 const identidad =
-document.getElementById(
-'identidad'
-).value;
+document.getElementById('identidad').value;
 
 const etapa =
-document.getElementById(
-'etapa'
-).value;
+document.getElementById('etapa').value;
 
 if(!nombre || !identidad || !etapa){
 
-mostrarToast(
-'Complete todos los datos'
-);
+mostrarToast('Complete todos los datos');
 
 return;
 
 }
 
-const { error } =
 await supabaseClient
 .from('usuarios')
 .insert([{
@@ -1063,61 +919,37 @@ identidad,
 etapa
 }]);
 
-if(error){
-
-mostrarToast(
-'Error al guardar'
-);
-
-return;
-
-}
-
-document.getElementById(
-'nombre'
-).value='';
-
-document.getElementById(
-'identidad'
-).value='';
-
-document.getElementById(
-'etapa'
-).value='';
+document.getElementById('nombre').value='';
+document.getElementById('identidad').value='';
+document.getElementById('etapa').value='';
 
 await cargarUsuarios();
 
-mostrarToast(
-'Usuario guardado correctamente'
-);
+mostrarToast('Usuario guardado');
 
 }
 
 function buscarUsuarios(){
 
 const texto =
-document.getElementById(
-'buscarUsuario'
-).value.toLowerCase();
+document.getElementById('buscarUsuario')
+.value
+.toLowerCase();
 
 const lista =
-document.getElementById(
-'listaBusqueda'
-);
+document.getElementById('listaBusqueda');
 
 lista.innerHTML='';
 
 usuarios
 .filter(u =>
-u.nombre.toLowerCase()
-.includes(texto)
+u.nombre.toLowerCase().includes(texto)
 )
 .forEach((u,index)=>{
 
 lista.innerHTML += `
 
-<div
-class="usuario-item"
+<div class="usuario-item"
 onclick="mostrarUsuario(${index})">
 
 ${u.nombre}
@@ -1220,9 +1052,7 @@ ${filas}
 async function eliminarUsuario(id){
 
 const confirmar =
-confirm(
-'¿Eliminar usuario?'
-);
+confirm('¿Eliminar usuario?');
 
 if(!confirmar) return;
 
@@ -1237,9 +1067,7 @@ document.getElementById(
 'informacionUsuario'
 ).innerHTML='';
 
-mostrarToast(
-'Usuario eliminado'
-);
+mostrarToast('Usuario eliminado');
 
 }
 
@@ -1281,13 +1109,9 @@ etapa
 
 await cargarUsuarios();
 
-mostrarToast(
-'Usuario actualizado'
-);
+mostrarToast('Usuario actualizado');
 
 }
-
-/* PRESTAMOS */
 
 async function cargarPrestamos(){
 
@@ -1306,24 +1130,16 @@ renderPrestamos();
 async function registrarPrestamo(){
 
 const codigo =
-document.getElementById(
-'codigo'
-).value;
+document.getElementById('codigo').value;
 
 const libro =
-document.getElementById(
-'libro'
-).value;
+document.getElementById('libro').value;
 
 const usuario =
-document.getElementById(
-'usuarioPrestamo'
-).value;
+document.getElementById('usuarioPrestamo').value;
 
 const fecha =
-document.getElementById(
-'fecha'
-).value;
+document.getElementById('fecha').value;
 
 if(
 !codigo ||
@@ -1332,9 +1148,7 @@ if(
 !fecha
 ){
 
-mostrarToast(
-'Complete todos los datos'
-);
+mostrarToast('Complete todos los datos');
 
 return;
 
@@ -1352,9 +1166,7 @@ estado:'Prestado'
 
 await cargarPrestamos();
 
-mostrarToast(
-'Préstamo registrado'
-);
+mostrarToast('Préstamo registrado');
 
 }
 
@@ -1369,18 +1181,14 @@ estado:'Devuelto'
 
 await cargarPrestamos();
 
-mostrarToast(
-'Libro devuelto'
-);
+mostrarToast('Libro devuelto');
 
 }
 
 function renderPrestamos(){
 
 const tabla =
-document.getElementById(
-'tablaPrestamos'
-);
+document.getElementById('tablaPrestamos');
 
 let html='';
 
@@ -1447,8 +1255,6 @@ tabla.innerHTML = html;
 
 }
 
-/* CERRAR */
-
 async function cerrarSesion(){
 
 await supabaseClient.auth.signOut();
@@ -1456,8 +1262,6 @@ await supabaseClient.auth.signOut();
 location.reload();
 
 }
-
-/* ONLOAD */
 
 window.onload = async function(){
 
