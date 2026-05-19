@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Biblioteca Padre Juan Tajack
-</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca Padre Juan Tajack</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
@@ -26,25 +19,28 @@ font-family:Arial,sans-serif;
 background:#f2f4f8;
 }
 
-/* LOGIN */
-
 #loginBox{
 max-width:420px;
-margin:60px auto;
+margin:70px auto;
 background:white;
-padding:35px;
+padding:40px;
 border-radius:18px;
-box-shadow:0 0 20px rgba(0,0,0,0.12);
+box-shadow:0 0 20px rgba(0,0,0,0.1);
 }
 
 #loginBox h2{
 text-align:center;
 margin-bottom:25px;
-color:#004f77;
-font-size:32px;
+font-size:34px;
+color:#003b5c;
 }
 
-/* HEADER */
+#loginBox p{
+text-align:center;
+color:#666;
+margin-bottom:25px;
+line-height:1.8;
+}
 
 .header{
 background:linear-gradient(90deg,#001f3f,#004f77);
@@ -62,21 +58,19 @@ font-size:32px;
 cursor:pointer;
 }
 
-/* MAIN */
-
 .main{
 display:flex;
 }
 
 .sidebar{
-width:220px;
+width:230px;
 background:#012b46;
 min-height:100vh;
 transition:0.3s;
 }
 
 .sidebar.oculto{
-margin-left:-220px;
+margin-left:-230px;
 }
 
 .menu-item{
@@ -108,8 +102,6 @@ margin-bottom:25px;
 margin-bottom:18px;
 color:#004f77;
 }
-
-/* INPUTS */
 
 input,
 select,
@@ -147,8 +139,6 @@ background:#2e7d32;
 margin-top:10px;
 }
 
-/* TABLAS */
-
 table{
 width:100%;
 border-collapse:collapse;
@@ -167,8 +157,6 @@ padding:10px;
 text-align:center;
 }
 
-/* PANELES */
-
 .panel{
 display:none;
 }
@@ -176,8 +164,6 @@ display:none;
 .panel.active{
 display:block;
 }
-
-/* BUSCADOR */
 
 .lista-busqueda{
 border:1px solid #ccc;
@@ -199,8 +185,6 @@ border-bottom:1px solid #eee;
 background:#eef7ff;
 }
 
-/* ESTADOS */
-
 .estado-normal{
 background:#d6e8ff;
 }
@@ -221,18 +205,19 @@ margin-top:20px;
 }
 
 </style>
-
 </head>
 
 <body>
-
-<!-- LOGIN -->
 
 <div id="loginBox">
 
 <h2>
 Biblioteca SMNSS
 </h2>
+
+<p>
+Sistema de consulta y administración bibliotecaria.
+</p>
 
 <input
 type="email"
@@ -258,8 +243,6 @@ Entrar como Visitante
 
 </div>
 
-<!-- SISTEMA -->
-
 <div id="sistema" style="display:none;">
 
 <div class="header">
@@ -281,8 +264,7 @@ Seminario Mayor Nuestra Señora de Suyapa
 
 <div class="main">
 
-<div class="sidebar"
-id="sidebar">
+<div class="sidebar" id="sidebar">
 
 <div class="menu-item"
 onclick="mostrarPanel('inicio')">
@@ -302,8 +284,6 @@ Préstamos
 </div>
 
 <div class="content">
-
-<!-- INICIO -->
 
 <div id="inicio"
 class="panel active">
@@ -348,8 +328,6 @@ Guardar Usuario
 
 </div>
 
-<!-- USUARIOS -->
-
 <div id="usuarios"
 class="panel">
 
@@ -374,8 +352,6 @@ Seleccione usuario
 </div>
 
 </div>
-
-<!-- PRESTAMOS -->
 
 <div id="prestamos"
 class="panel">
@@ -464,8 +440,6 @@ Libros Prestados
 
 <script>
 
-/* SUPABASE */
-
 const supabaseUrl =
 'https://wizrwignblrgkhyvtlyl.supabase.co';
 
@@ -478,13 +452,9 @@ supabaseUrl,
 supabaseKey
 );
 
-/* VARIABLES */
-
 let usuarios = [];
 let prestamos = [];
 let modoVisitante = false;
-
-/* LOGIN */
 
 async function loginBibliotecario(){
 
@@ -515,8 +485,6 @@ document.getElementById('sistema').style.display='block';
 
 }
 
-/* VISITANTE */
-
 function entrarVisitante(){
 
 modoVisitante = true;
@@ -524,8 +492,6 @@ modoVisitante = true;
 document.getElementById('loginBox').style.display='none';
 
 document.getElementById('sistema').style.display='block';
-
-/* OCULTAR PRESTAMOS */
 
 document.querySelectorAll('.menu-item')
 .forEach(function(item){
@@ -537,8 +503,6 @@ item.style.display='none';
 }
 
 });
-
-/* OCULTAR BOTONES */
 
 setTimeout(function(){
 
@@ -561,21 +525,25 @@ btn.style.display='none';
 
 },500);
 
-/* INFORMACION */
-
 document.getElementById('inicio').innerHTML = `
 
-<div class="card">
+<div style="
+max-width:1000px;
+margin:auto;
+">
 
 <div style="
-text-align:center;
-margin-bottom:30px;
+background:white;
+padding:40px;
+border-radius:18px;
+box-shadow:0 0 15px rgba(0,0,0,0.08);
 ">
 
 <h1 style="
-color:#004f77;
+color:#003b5c;
 font-size:42px;
 margin-bottom:10px;
+font-weight:bold;
 ">
 
 Biblioteca SMNSS
@@ -583,253 +551,128 @@ Biblioteca SMNSS
 </h1>
 
 <p style="
-font-size:20px;
-color:#555;
+font-size:18px;
+color:#666;
+margin-bottom:35px;
 ">
 
 Seminario Mayor Nuestra Señora de Suyapa
 
 </p>
 
-</div>
+<hr style="
+margin-bottom:35px;
+border:none;
+border-top:1px solid #ddd;
+">
 
-<div style="
-background:#eef7ff;
-padding:25px;
-border-radius:15px;
+<h2 style="
+color:#003b5c;
+margin-bottom:18px;
+font-size:28px;
+">
+
+Presentación
+
+</h2>
+
+<p style="
 line-height:2;
+font-size:17px;
+color:#444;
+text-align:justify;
 ">
 
-<h2 style="
-color:#004f77;
-margin-bottom:15px;
-">
+La Biblioteca Padre Juan Tajack es un espacio
+académico destinado al estudio, investigación y
+formación intelectual de la comunidad del Seminario.
 
-¿Qué es una biblioteca?
-
-</h2>
-
-<p>
-
-La biblioteca es un espacio de formación,
-investigación y crecimiento intelectual,
-donde los seminaristas y usuarios pueden
-consultar distintos recursos académicos
-y espirituales para fortalecer su aprendizaje.
+Los usuarios pueden consultar material relacionado
+principalmente con Filosofía, Teología y formación
+humana.
 
 </p>
 
-</div>
-
-<div style="
-margin-top:25px;
-background:white;
-border:1px solid #ddd;
-padding:25px;
-border-radius:15px;
-">
-
 <h2 style="
-color:#004f77;
+color:#003b5c;
+margin-top:40px;
 margin-bottom:20px;
+font-size:28px;
 ">
 
-Secciones de la Biblioteca
+Secciones
 
 </h2>
 
 <div style="
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-">
-
-<div style="
-background:#f5f8fc;
-padding:20px;
-border-radius:12px;
-">
-
-<h3 style="color:#004f77;">
-Recepción
-</h3>
-
-<p style="
-margin-top:10px;
-line-height:1.8;
-">
-
-Área donde se brinda información,
-registro y control de préstamos
-de libros.
-
-</p>
-
-</div>
-
-<div style="
-background:#f5f8fc;
-padding:20px;
-border-radius:12px;
-">
-
-<h3 style="color:#004f77;">
-Sala de Revistas
-</h3>
-
-<p style="
-margin-top:10px;
-line-height:1.8;
-">
-
-Espacio destinado a revistas,
-material informativo y lectura rápida.
-
-</p>
-
-</div>
-
-<div style="
-background:#f5f8fc;
-padding:20px;
-border-radius:12px;
-">
-
-<h3 style="color:#004f77;">
-Sala de Libros
-</h3>
-
-<p style="
-margin-top:10px;
-line-height:1.8;
-">
-
-Contiene libros de Filosofía,
-Teología y otras áreas de formación.
-
-</p>
-
-</div>
-
-<div style="
-background:#f5f8fc;
-padding:20px;
-border-radius:12px;
-">
-
-<h3 style="color:#004f77;">
-Consulta de Historial
-</h3>
-
-<p style="
-margin-top:10px;
-line-height:1.8;
-">
-
-Los usuarios pueden consultar
-sus préstamos y devoluciones.
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-<div style="
-margin-top:25px;
-background:#fff8e6;
-padding:25px;
-border-radius:15px;
-border-left:8px solid #d4a017;
-">
-
-<h2 style="
-margin-bottom:20px;
-color:#7a5600;
-">
-
-Reglas de Uso
-
-</h2>
-
-<ul style="
-padding-left:25px;
 line-height:2.2;
 font-size:17px;
+color:#444;
 ">
 
-<li>
-Todo libro debe devolverse
-en la fecha indicada.
-</li>
+<p>
+<strong>Recepción:</strong>
+Área de información y préstamos.
+</p>
 
-<li>
-La multa es de L. 5 por día de retraso.
-</li>
+<p>
+<strong>Sala de Revistas:</strong>
+Consulta de revistas y publicaciones.
+</p>
 
-<li>
-Debe mantenerse el silencio y el orden.
-</li>
+<p>
+<strong>Sala de Libros:</strong>
+Libros de Filosofía, Teología y formación.
+</p>
 
-<li>
-No se permite dañar libros.
-</li>
-
-<li>
-Todo préstamo queda registrado.
-</li>
-
-<li>
-Los libros devueltos desaparecen
-del panel de préstamos activos.
-</li>
-
-<li>
-El usuario puede consultar
-su historial personal.
-</li>
-
-</ul>
+<p>
+<strong>Consulta de Historial:</strong>
+Verificación de préstamos y devoluciones.
+</p>
 
 </div>
 
+<h2 style="
+color:#003b5c;
+margin-top:40px;
+margin-bottom:20px;
+font-size:28px;
+">
+
+Reglamento
+
+</h2>
+
 <div style="
-margin-top:25px;
-background:#e8f5e9;
-padding:20px;
-border-radius:15px;
-text-align:center;
+background:#f8f9fb;
+padding:25px;
+border-radius:12px;
+line-height:2.2;
+font-size:17px;
+color:#444;
 ">
 
-<h3 style="
-color:#1b5e20;
-margin-bottom:10px;
-">
+<p>• Todo libro debe devolverse en la fecha indicada.</p>
 
-Biblioteca Padre Juan Tajack
+<p>• La multa por retraso es de L. 5 diarios.</p>
 
-</h3>
+<p>• Debe mantenerse el silencio y el orden.</p>
 
-<p style="
-line-height:1.8;
-">
+<p>• No se permite dañar libros.</p>
 
-Formando integralmente
-desde el estudio,
-la disciplina
-y el amor al conocimiento.
+<p>• Todo préstamo queda registrado.</p>
 
-</p>
+<p>• Cada usuario puede consultar su historial personal.</p>
+
+</div>
+
+</div>
 
 </div>
 
 `;
 
 }
-
-/* INICIO */
 
 window.onload = async function(){
 
@@ -840,8 +683,6 @@ await cargarUsuarios();
 await cargarPrestamos();
 
 };
-
-/* MENU */
 
 function toggleMenu(){
 
@@ -870,13 +711,11 @@ document
 
 }
 
-/* FECHA */
-
 function colocarFecha(){
 
 let fecha = new Date();
 
-fecha.setDate(fecha.getDate() + 15);
+fecha.setDate(fecha.getDate()+15);
 
 let year = fecha.getFullYear();
 
@@ -888,14 +727,13 @@ let day =
 String(fecha.getDate())
 .padStart(2,'0');
 
-document
-.getElementById('fechaDevolucion')
-.value =
+let fechaFinal =
 year+'-'+month+'-'+day;
 
-}
+document.getElementById('fechaDevolucion').value =
+fechaFinal;
 
-/* GUARDAR USUARIO */
+}
 
 async function guardarUsuario(){
 
@@ -911,6 +749,17 @@ document.getElementById('identidad').value;
 
 let etapa =
 document.getElementById('etapa').value;
+
+if(
+nombre==='' ||
+identidad==='' ||
+etapa===''
+){
+
+alert('Complete todos los campos');
+return;
+
+}
 
 const { error } =
 await supabaseClient
@@ -936,8 +785,6 @@ await cargarUsuarios();
 
 }
 
-/* CARGAR USUARIOS */
-
 async function cargarUsuarios(){
 
 const { data } =
@@ -946,7 +793,7 @@ await supabaseClient
 .select('*')
 .order('id');
 
-usuarios = data;
+usuarios = data || [];
 
 let lista =
 document.getElementById('listaUsuarios');
@@ -965,7 +812,239 @@ usuario.nombre+
 
 }
 
-/* MOSTRAR INFO */
+function filtrarUsuarios(){
+
+let texto =
+document
+.getElementById('buscarUsuario')
+.value
+.toLowerCase();
+
+let lista =
+document.getElementById('listaBusqueda');
+
+lista.innerHTML='';
+
+if(texto===''){
+
+lista.style.display='none';
+return;
+
+}
+
+usuarios.forEach(function(usuario,index){
+
+if(
+usuario.nombre
+.toLowerCase()
+.includes(texto)
+){
+
+lista.innerHTML +=
+'<div class="item-usuario" onclick="seleccionarUsuario('+index+')">'+
+usuario.nombre+
+'</div>';
+
+}
+
+});
+
+lista.style.display='block';
+
+}
+
+function seleccionarUsuario(index){
+
+document.getElementById('buscarUsuario').value =
+usuarios[index].nombre;
+
+document.getElementById('usuarioPrestamo').value =
+usuarios[index].nombre;
+
+document.getElementById('listaBusqueda').style.display =
+'none';
+
+}
+
+async function registrarPrestamo(){
+
+if(modoVisitante){
+return;
+}
+
+let codigo =
+document.getElementById('codigo').value;
+
+let libro =
+document.getElementById('libro').value;
+
+let usuario =
+document.getElementById('usuarioPrestamo').value;
+
+let fecha =
+document.getElementById('fechaDevolucion').value;
+
+if(
+codigo==='' ||
+libro==='' ||
+usuario==='' ||
+fecha===''
+){
+
+alert('Complete todos los campos');
+return;
+
+}
+
+const { error } =
+await supabaseClient
+.from('prestamos')
+.insert([
+{
+codigo:codigo,
+libro:libro,
+usuario:usuario,
+fecha_devolucion:fecha,
+estado:'Prestado',
+dias_retraso:0
+}
+]);
+
+if(error){
+
+alert('Error');
+return;
+
+}
+
+alert('Préstamo registrado');
+
+await cargarPrestamos();
+
+}
+
+async function cargarPrestamos(){
+
+const { data } =
+await supabaseClient
+.from('prestamos')
+.select('*')
+.order('id');
+
+prestamos = data || [];
+
+mostrarPrestamos();
+
+}
+
+function mostrarPrestamos(){
+
+let tabla =
+document.getElementById('tablaPrestamos');
+
+tabla.innerHTML='';
+
+prestamos.forEach(function(p){
+
+if(p.estado !== 'Devuelto'){
+
+let clase='estado-normal';
+
+let fechaHoy = new Date();
+
+let fechaDev = new Date(p.fecha_devolucion);
+
+let diferencia =
+Math.ceil(
+(fechaDev-fechaHoy)/
+(1000*60*60*24)
+);
+
+let estado='En tiempo';
+
+let retraso=0;
+
+if(diferencia<=3){
+
+estado='Por vencer';
+clase='estado-alerta';
+
+}
+
+if(diferencia<0){
+
+estado='Vencido';
+clase='estado-vencido';
+retraso=Math.abs(diferencia);
+
+}
+
+tabla.innerHTML += `
+<tr class="${clase}">
+
+<td>${p.codigo}</td>
+
+<td>${p.libro}</td>
+
+<td>${p.usuario}</td>
+
+<td>${p.fecha_devolucion}</td>
+
+<td>
+
+${estado}
+
+<br>
+
+<button
+class="btn-devolver"
+onclick="devolverLibro(${p.id})">
+
+Devolver
+
+</button>
+
+</td>
+
+<td>${retraso}</td>
+
+</tr>
+`;
+
+}
+
+});
+
+}
+
+async function devolverLibro(id){
+
+if(modoVisitante){
+return;
+}
+
+const { error } =
+await supabaseClient
+.from('prestamos')
+.update({
+estado:'Devuelto'
+})
+.eq('id',id);
+
+if(error){
+
+alert('Error');
+return;
+
+}
+
+alert('Libro devuelto');
+
+await cargarPrestamos();
+
+mostrarInformacionUsuario();
+
+}
 
 function mostrarInformacionUsuario(){
 
@@ -973,7 +1052,13 @@ let index =
 document.getElementById('listaUsuarios').value;
 
 if(index===''){
+
+document.getElementById(
+'informacionUsuario'
+).innerHTML='';
+
 return;
+
 }
 
 let usuario = usuarios[index];
@@ -992,14 +1077,44 @@ html += `
 
 <h3>${usuario.nombre}</h3>
 
-<p><strong>Identidad:</strong>
-${usuario.identidad}</p>
+<p>
+<strong>Identidad:</strong>
+${usuario.identidad}
+</p>
 
-<p><strong>Etapa:</strong>
-${usuario.etapa}</p>
+<p>
+<strong>Etapa:</strong>
+${usuario.etapa}
+</p>
+`;
 
-</div>
+if(!modoVisitante){
 
+html += `
+
+<button
+class="btn-editar"
+onclick="editarUsuario(${index})">
+
+Editar Usuario
+
+</button>
+
+<button
+class="btn-eliminar"
+onclick="eliminarUsuario(${index})">
+
+Eliminar Usuario
+
+</button>
+
+`;
+
+}
+
+html += `</div>`;
+
+html += `
 <h3 style="margin-top:20px;">
 Historial de préstamos
 </h3>
@@ -1033,6 +1148,103 @@ html += `</table>`;
 document.getElementById(
 'informacionUsuario'
 ).innerHTML = html;
+
+}
+
+async function editarUsuario(index){
+
+if(modoVisitante){
+return;
+}
+
+let usuario = usuarios[index];
+
+let nuevoNombre =
+prompt(
+'Editar nombre',
+usuario.nombre
+);
+
+let nuevaIdentidad =
+prompt(
+'Editar identidad',
+usuario.identidad
+);
+
+let nuevaEtapa =
+prompt(
+'Editar etapa',
+usuario.etapa
+);
+
+if(
+!nuevoNombre ||
+!nuevaIdentidad ||
+!nuevaEtapa
+){
+return;
+}
+
+const { error } =
+await supabaseClient
+.from('usuarios')
+.update({
+nombre:nuevoNombre,
+identidad:nuevaIdentidad,
+etapa:nuevaEtapa
+})
+.eq('id',usuario.id);
+
+if(error){
+
+alert('Error');
+return;
+
+}
+
+alert('Usuario actualizado');
+
+await cargarUsuarios();
+
+mostrarInformacionUsuario();
+
+}
+
+async function eliminarUsuario(index){
+
+if(modoVisitante){
+return;
+}
+
+let confirmar =
+confirm('¿Eliminar usuario?');
+
+if(!confirmar){
+return;
+}
+
+let usuario = usuarios[index];
+
+const { error } =
+await supabaseClient
+.from('usuarios')
+.delete()
+.eq('id',usuario.id);
+
+if(error){
+
+alert('Error');
+return;
+
+}
+
+alert('Usuario eliminado');
+
+await cargarUsuarios();
+
+document.getElementById(
+'informacionUsuario'
+).innerHTML='';
 
 }
 
