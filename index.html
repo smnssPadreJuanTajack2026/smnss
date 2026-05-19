@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Biblioteca Padre Juan Tajack</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Biblioteca Padre Juan Tajack
+</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -20,40 +23,33 @@ box-sizing:border-box;
 
 body{
 font-family:Arial,sans-serif;
-background:#eef2f7;
+background:#f2f4f8;
 }
 
 .header{
-background:linear-gradient(90deg,#002b45,#005c8f);
+background:linear-gradient(90deg,#001f3f,#004f77);
 color:white;
 padding:20px;
-display:flex;
-align-items:center;
-gap:20px;
-}
-
-.logo{
-width:70px;
-height:70px;
-background:white;
-border-radius:12px;
-padding:5px;
-object-fit:contain;
-}
-
-.header-text h1{
-font-size:32px;
-}
-
-.header-text p{
-margin-top:5px;
-font-size:16px;
+text-align:center;
+position:relative;
 }
 
 .menu-btn{
-font-size:35px;
+position:absolute;
+left:20px;
+top:20px;
+font-size:30px;
 cursor:pointer;
-margin-right:10px;
+}
+
+.logo{
+width:90px;
+height:90px;
+object-fit:contain;
+background:white;
+border-radius:50%;
+padding:8px;
+margin-bottom:10px;
 }
 
 .main{
@@ -61,22 +57,22 @@ display:flex;
 }
 
 .sidebar{
-width:250px;
+width:220px;
 background:#012b46;
 min-height:100vh;
-transition:.3s;
+transition:0.3s;
 }
 
 .sidebar.oculto{
-margin-left:-250px;
+margin-left:-220px;
 }
 
 .menu-item{
-padding:22px;
 color:white;
-font-size:20px;
-cursor:pointer;
+padding:18px;
 border-bottom:1px solid rgba(255,255,255,0.1);
+cursor:pointer;
+font-size:18px;
 }
 
 .menu-item:hover{
@@ -85,44 +81,66 @@ background:#014d7a;
 
 .content{
 flex:1;
-padding:30px;
+padding:20px;
 }
 
 .card{
 background:white;
-padding:30px;
-border-radius:18px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
-margin-bottom:30px;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+margin-bottom:20px;
 }
 
 .card h2{
-margin-bottom:25px;
-color:#005c8f;
-font-size:40px;
+margin-bottom:15px;
+color:#004f77;
 }
 
 input,
 select,
 button{
 width:100%;
-padding:18px;
-margin-top:15px;
-border-radius:10px;
+padding:12px;
+margin-top:10px;
+border-radius:6px;
 border:1px solid #ccc;
-font-size:20px;
+font-size:16px;
 }
 
 button{
-background:#005c8f;
+background:#006b9f;
 color:white;
-font-weight:bold;
 border:none;
+font-weight:bold;
 cursor:pointer;
 }
 
 button:hover{
-background:#003f63;
+background:#004f77;
+}
+
+.btn-devolver{
+background:#2e7d32;
+margin-top:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+table th{
+background:#004f77;
+color:white;
+padding:10px;
+}
+
+table td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
 }
 
 .panel{
@@ -133,47 +151,43 @@ display:none;
 display:block;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
+.lista-busqueda{
+border:1px solid #ccc;
+background:white;
+border-radius:6px;
+max-height:150px;
+overflow-y:auto;
+display:none;
+margin-top:5px;
 }
 
-th{
-background:#005c8f;
-color:white;
-padding:15px;
+.item-usuario{
+padding:10px;
+cursor:pointer;
+border-bottom:1px solid #eee;
 }
 
-td{
-padding:15px;
-border:1px solid #ddd;
-text-align:center;
+.item-usuario:hover{
+background:#eef7ff;
 }
 
 .estado-normal{
-background:#d9f5d9;
+background:#d6e8ff;
 }
 
 .estado-alerta{
-background:#fff4b8;
+background:#fff0b3;
 }
 
 .estado-vencido{
 background:#ffd6d6;
 }
 
-.btn-devolver{
-background:#2e7d32;
-padding:10px;
-border:none;
-border-radius:8px;
-color:white;
-cursor:pointer;
-}
-
-.btn-devolver:hover{
-background:#1f5c24;
+.info-usuario{
+background:#eef7ff;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
 }
 
 </style>
@@ -184,16 +198,20 @@ background:#1f5c24;
 
 <div class="header">
 
-<div class="menu-btn" onclick="toggleMenu()">
-☰
-</div>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<img src="https://i.imgur.com/5qH8Y7A.png" class="logo">
+<img
+src="https://i.imgur.com/5qH8Y7A.png"
+class="logo"
+>
 
-<div class="header-text">
-<h1>Biblioteca Padre Juan Tajack</h1>
-<p>Seminario Mayor Nuestra Señora de Suyapa</p>
-</div>
+<h1>
+Biblioteca Padre Juan Tajack
+</h1>
+
+<h3>
+Seminario Mayor Nuestra Señora de Suyapa
+</h3>
 
 </div>
 
@@ -201,15 +219,18 @@ background:#1f5c24;
 
 <div class="sidebar" id="sidebar">
 
-<div class="menu-item" onclick="mostrarPanel('inicio')">
+<div class="menu-item"
+onclick="mostrarPanel('inicio')">
 Inicio
 </div>
 
-<div class="menu-item" onclick="mostrarPanel('usuarios')">
+<div class="menu-item"
+onclick="mostrarPanel('usuarios')">
 Usuarios
 </div>
 
-<div class="menu-item" onclick="mostrarPanel('prestamos')">
+<div class="menu-item"
+onclick="mostrarPanel('prestamos')">
 Préstamos
 </div>
 
@@ -217,19 +238,28 @@ Préstamos
 
 <div class="content">
 
-<div id="inicio" class="panel active">
+<div id="inicio"
+class="panel active">
 
 <div class="card">
 
-<h2>Registro de Usuario</h2>
+<h2>
+Registro de Usuario
+</h2>
 
-<input type="text" id="nombre" placeholder="Nombre completo">
+<input type="text"
+id="nombre"
+placeholder="Nombre completo">
 
-<input type="text" id="identidad" placeholder="Número identidad">
+<input type="text"
+id="identidad"
+placeholder="Número de identidad">
 
 <select id="etapa">
 
-<option value="">Seleccione etapa</option>
+<option value="">
+Seleccione etapa
+</option>
 
 <option value="Configuradora">
 Configuradora
@@ -249,11 +279,14 @@ Guardar Usuario
 
 </div>
 
-<div id="usuarios" class="panel">
+<div id="usuarios"
+class="panel">
 
 <div class="card">
 
-<h2>Usuarios Registrados</h2>
+<h2>
+Usuarios Registrados
+</h2>
 
 <table>
 
@@ -277,25 +310,52 @@ Guardar Usuario
 
 </div>
 
-<div id="prestamos" class="panel">
+<div id="prestamos"
+class="panel">
 
 <div class="card">
 
-<h2>Nuevo Préstamo</h2>
+<h2>
+Nuevo Préstamo
+</h2>
 
-<input type="text" id="codigo" placeholder="Código préstamo">
+<input type="text"
+id="codigo"
+placeholder="Código préstamo">
 
-<input type="text" id="libro" placeholder="Nombre libro">
+<input type="text"
+id="libro"
+placeholder="Nombre libro">
 
-<input type="text" id="usuarioPrestamo" placeholder="Usuario">
+<input
+type="text"
+id="buscarUsuario"
+placeholder="Buscar usuario"
+onkeyup="filtrarUsuarios()"
+>
 
-<label style="font-size:22px;display:block;margin-top:15px;">
+<div
+class="lista-busqueda"
+id="listaBusqueda">
+</div>
+
+<input
+type="hidden"
+id="usuarioPrestamo"
+>
+
+<label
+style="display:block;margin-top:10px;">
 Fecha devolución
 </label>
 
-<input type="date" id="fechaDevolucion">
+<input
+type="date"
+id="fechaDevolucion"
+>
 
-<button onclick="registrarPrestamo()">
+<button
+onclick="registrarPrestamo()">
 Registrar Préstamo
 </button>
 
@@ -303,7 +363,9 @@ Registrar Préstamo
 
 <div class="card">
 
-<h2>Libros Prestados</h2>
+<h2>
+Libros Prestados
+</h2>
 
 <table>
 
@@ -316,6 +378,7 @@ Registrar Préstamo
 <th>Usuario</th>
 <th>Fecha devolución</th>
 <th>Estado</th>
+<th>Días retraso</th>
 
 </tr>
 
@@ -341,17 +404,32 @@ const supabaseUrl =
 const supabaseKey =
 'sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ';
 
-const supabase =
+const supabaseClient =
 window.supabase.createClient(
 supabaseUrl,
 supabaseKey
 );
 
+let usuarios = [];
+
+let prestamos = [];
+
+window.onload = async function(){
+
+colocarFecha();
+
+await cargarUsuarios();
+
+await cargarPrestamos();
+
+};
+
 function toggleMenu(){
 
 document
 .getElementById('sidebar')
-.classList.toggle('oculto');
+.classList
+.toggle('oculto');
 
 }
 
@@ -368,7 +446,33 @@ p.classList.remove('active');
 
 document
 .getElementById(id)
-.classList.add('active');
+.classList
+.add('active');
+
+}
+
+function colocarFecha(){
+
+let fecha = new Date();
+
+fecha.setDate(fecha.getDate() + 15);
+
+let year = fecha.getFullYear();
+
+let month =
+String(fecha.getMonth()+1)
+.padStart(2,'0');
+
+let day =
+String(fecha.getDate())
+.padStart(2,'0');
+
+let finalFecha =
+year + '-' + month + '-' + day;
+
+document
+.getElementById('fechaDevolucion')
+.value = finalFecha;
 
 }
 
@@ -384,18 +488,19 @@ let etapa =
 document.getElementById('etapa').value;
 
 if(
-nombre==='' ||
-identidad==='' ||
-etapa===''
+nombre === '' ||
+identidad === '' ||
+etapa === ''
 ){
 
 alert('Complete todos los campos');
+
 return;
 
 }
 
 const { error } =
-await supabase
+await supabaseClient
 .from('usuarios')
 .insert([
 {
@@ -421,40 +526,101 @@ document.getElementById('nombre').value='';
 document.getElementById('identidad').value='';
 document.getElementById('etapa').value='';
 
-cargarUsuarios();
+await cargarUsuarios();
 
 }
 
 async function cargarUsuarios(){
 
 const { data , error } =
-await supabase
+await supabaseClient
 .from('usuarios')
-.select('*');
+.select('*')
+.order('id');
 
 if(error){
 
 console.log(error);
+
 return;
 
 }
+
+usuarios = data;
 
 let tabla =
 document.getElementById('tablaUsuarios');
 
 tabla.innerHTML='';
 
-data.forEach(function(u){
+usuarios.forEach(function(usuario){
 
 tabla.innerHTML += `
 <tr>
-<td>${u.nombre}</td>
-<td>${u.identidad}</td>
-<td>${u.etapa}</td>
+<td>${usuario.nombre}</td>
+<td>${usuario.identidad}</td>
+<td>${usuario.etapa}</td>
 </tr>
 `;
 
 });
+
+}
+
+function filtrarUsuarios(){
+
+let texto =
+document
+.getElementById('buscarUsuario')
+.value
+.toLowerCase();
+
+let lista =
+document.getElementById('listaBusqueda');
+
+lista.innerHTML='';
+
+if(texto === ''){
+
+lista.style.display='none';
+
+return;
+
+}
+
+usuarios.forEach(function(usuario,index){
+
+if(
+usuario.nombre
+.toLowerCase()
+.includes(texto)
+){
+
+lista.innerHTML +=
+'<div class="item-usuario" onclick="seleccionarUsuario('+index+')">'+
+usuario.nombre+
+' - '+
+usuario.identidad+
+'</div>';
+
+}
+
+});
+
+lista.style.display='block';
+
+}
+
+function seleccionarUsuario(index){
+
+document.getElementById('buscarUsuario').value =
+usuarios[index].nombre;
+
+document.getElementById('usuarioPrestamo').value =
+usuarios[index].nombre;
+
+document.getElementById('listaBusqueda').style.display =
+'none';
 
 }
 
@@ -473,18 +639,20 @@ let fecha =
 document.getElementById('fechaDevolucion').value;
 
 if(
-codigo==='' ||
-libro==='' ||
-usuario==='' ||
-fecha===''
+codigo === '' ||
+libro === '' ||
+usuario === '' ||
+fecha === ''
 ){
 
 alert('Complete todos los campos');
+
 return;
 
 }
 
 let hoy = new Date();
+
 let fechaDev = new Date(fecha);
 
 let diferencia =
@@ -494,6 +662,8 @@ Math.ceil(
 );
 
 let estado = 'En tiempo';
+
+let retraso = 0;
 
 if(diferencia <= 3){
 
@@ -505,10 +675,12 @@ if(diferencia < 0){
 
 estado = 'Vencido';
 
+retraso = Math.abs(diferencia);
+
 }
 
 const { error } =
-await supabase
+await supabaseClient
 .from('prestamos')
 .insert([
 {
@@ -517,7 +689,7 @@ libro:libro,
 usuario:usuario,
 fecha_devolucion:fecha,
 estado:estado,
-dias_retraso:0
+dias_retraso:retraso
 }
 ]);
 
@@ -535,32 +707,43 @@ alert('Préstamo registrado');
 
 document.getElementById('codigo').value='';
 document.getElementById('libro').value='';
+document.getElementById('buscarUsuario').value='';
 document.getElementById('usuarioPrestamo').value='';
 
-cargarPrestamos();
+await cargarPrestamos();
 
 }
 
 async function cargarPrestamos(){
 
 const { data , error } =
-await supabase
+await supabaseClient
 .from('prestamos')
-.select('*');
+.select('*')
+.order('id');
 
 if(error){
 
 console.log(error);
+
 return;
 
 }
+
+prestamos = data;
+
+mostrarPrestamos();
+
+}
+
+function mostrarPrestamos(){
 
 let tabla =
 document.getElementById('tablaPrestamos');
 
 tabla.innerHTML='';
 
-data.forEach(function(p){
+prestamos.forEach(function(p){
 
 let clase='estado-normal';
 
@@ -583,37 +766,13 @@ tabla.innerHTML += `
 <td>${p.usuario}</td>
 <td>${p.fecha_devolucion}</td>
 <td>${p.estado}</td>
+<td>${p.dias_retraso}</td>
 </tr>
 `;
 
 });
 
 }
-
-window.onload = function(){
-
-let fecha = new Date();
-
-fecha.setDate(fecha.getDate()+15);
-
-let year = fecha.getFullYear();
-
-let month =
-String(fecha.getMonth()+1)
-.padStart(2,'0');
-
-let day =
-String(fecha.getDate())
-.padStart(2,'0');
-
-document.getElementById('fechaDevolucion').value =
-year+'-'+month+'-'+day;
-
-cargarUsuarios();
-
-cargarPrestamos();
-
-};
 
 </script>
 
