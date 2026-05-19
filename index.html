@@ -165,6 +165,11 @@ Visitante
 </select>
 
 <input
+type="email"
+id="correo"
+placeholder="Correo bibliotecario">
+
+<input
 type="password"
 id="clave"
 placeholder="Contraseña bibliotecario">
@@ -410,7 +415,7 @@ let modoVisitante = false;
 
 /* LOGIN */
 
-function ingresarSistema(){
+async function ingresarSistema(){
 
 const tipo =
 document.getElementById(
@@ -425,14 +430,27 @@ return;
 
 }
 
+const correo =
+document.getElementById(
+'correo'
+).value;
+
 const clave =
 document.getElementById(
 'clave'
 ).value;
 
-if(clave !== 'Biblioteca2026*'){
+const { error } =
+await supabaseClient.auth.signInWithPassword({
 
-alert('Contraseña incorrecta');
+email:correo,
+password:clave
+
+});
+
+if(error){
+
+alert('Correo o contraseña incorrectos');
 
 return;
 
