@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Biblioteca Padre Juan Tajack</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -20,6 +22,31 @@ font-family:'Segoe UI',sans-serif;
 background:#eef3f8;
 overflow-x:hidden;
 color:#222;
+}
+
+/* TOAST */
+
+#toast{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#003b5c;
+color:white;
+padding:18px 28px;
+border-radius:14px;
+font-weight:700;
+font-size:16px;
+box-shadow:
+0 8px 20px rgba(0,0,0,0.2);
+opacity:0;
+pointer-events:none;
+transition:0.4s;
+z-index:5000;
+}
+
+#toast.show{
+opacity:1;
+transform:translateY(-10px);
 }
 
 /* LOGIN */
@@ -115,14 +142,6 @@ margin-top:12px;
 .btn-naranja{
 background:#f39c12;
 margin-top:12px;
-}
-
-.recuperar{
-margin-top:18px;
-text-align:center;
-color:#005b8f;
-font-weight:600;
-cursor:pointer;
 }
 
 /* TOPBAR */
@@ -269,7 +288,7 @@ line-height:1.9;
 color:#444;
 }
 
-/* VISITOR */
+/* INFO */
 
 .info-grid{
 display:grid;
@@ -347,6 +366,27 @@ margin-top:25px;
 border-left:7px solid #003b5c;
 }
 
+/* QR */
+
+.qr-box{
+margin-top:40px;
+background:#f4f8fc;
+padding:35px;
+border-radius:24px;
+text-align:center;
+border-left:7px solid #005b8f;
+}
+
+.qr-box img{
+width:220px;
+height:220px;
+background:white;
+padding:15px;
+border-radius:18px;
+box-shadow:
+0 8px 25px rgba(0,0,0,0.08);
+}
+
 /* MOBILE */
 
 @media(max-width:900px){
@@ -379,6 +419,8 @@ font-size:22px;
 </head>
 
 <body>
+
+<div id="toast"></div>
 
 <!-- LOGIN -->
 
@@ -423,14 +465,6 @@ placeholder="Contraseña bibliotecario">
 <button onclick="ingresarSistema()">
 Ingresar
 </button>
-
-<p
-class="recuperar"
-onclick="recuperarClave()">
-
-¿Olvidaste tu contraseña?
-
-</p>
 
 </div>
 
@@ -528,8 +562,7 @@ Biblioteca Padre Juan Tajack
 <p>
 
 La Biblioteca Padre Juan Tajack es un espacio académico
-destinado al estudio, investigación, lectura y formación
-intelectual de los seminaristas y visitantes.
+destinado al estudio, investigación y formación intelectual.
 
 </p>
 
@@ -585,6 +618,24 @@ Reglamento
 </ul>
 
 </div>
+
+</div>
+
+<div class="qr-box">
+
+<h2>
+QR Oficial del Sistema
+</h2>
+
+<p>
+
+Escanea el código QR para acceder rápidamente
+al sistema de la biblioteca.
+
+</p>
+
+<img
+src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://TU-SITIO.com">
 
 </div>
 
@@ -724,10 +775,10 @@ Libros Prestados
 <script>
 
 const SUPABASE_URL =
-"https://wizrwignblrgkhyvtlyl.supabase.co";
+"https://TU-PROYECTO.supabase.co";
 
 const SUPABASE_KEY =
-"TU_SUPABASE_KEY";
+"TU-ANON-KEY";
 
 const supabaseClient =
 supabase.createClient(
@@ -738,6 +789,29 @@ SUPABASE_KEY
 let usuarios = [];
 let prestamos = [];
 let modoVisitante = false;
+
+/* TOAST */
+
+function mostrarToast(texto){
+
+const toast =
+document.getElementById(
+'toast'
+);
+
+toast.innerText = texto;
+
+toast.classList.add('show');
+
+setTimeout(()=>{
+
+toast.classList.remove(
+'show'
+);
+
+},3000);
+
+}
 
 /* MENU */
 
@@ -777,6 +851,34 @@ id
 
 }
 
+/* SESION */
+
+async function verificarSesion(){
+
+const { data } =
+await supabaseClient.auth.getSession();
+
+if(data.session){
+
+document.getElementById(
+'loginBox'
+).style.display='none';
+
+document.getElementById(
+'sistema'
+).style.display='block';
+
+document.getElementById(
+'topbar'
+).style.display='flex';
+
+await cargarUsuarios();
+await cargarPrestamos();
+
+}
+
+}
+
 /* LOGIN */
 
 async function ingresarSistema(){
@@ -794,7 +896,26 @@ document.getElementById(
 'prestamosMenu'
 ).style.display='none';
 
-entrarSistema();
+document.getElementById(
+'loginBox'
+).style.display='none';
+
+document.getElementById(
+'sistema'
+).style.display='block';
+
+document.getElementById(
+'topbar'
+).style.display='flex';
+
+await cargarUsuarios();
+await cargarPrestamos();
+
+mostrarUsuariosVisitante();
+
+mostrarToast(
+'Bienvenido visitante'
+);
 
 return;
 
@@ -803,12 +924,12 @@ return;
 const correo =
 document.getElementById(
 'correo'
-).value;
+).value.trim();
 
 const clave =
 document.getElementById(
 'clave'
-).value;
+).value.trim();
 
 const { error } =
 await supabaseClient.auth.signInWithPassword({
@@ -820,7 +941,7 @@ password:clave
 
 if(error){
 
-alert(
+mostrarToast(
 'Correo o contraseña incorrectos'
 );
 
@@ -828,11 +949,11 @@ return;
 
 }
 
-entrarSistema();
+modoVisitante = false;
 
-}
-
-function entrarSistema(){
+document.getElementById(
+'prestamosMenu'
+).style.display='block';
 
 document.getElementById(
 'loginBox'
@@ -846,48 +967,11 @@ document.getElementById(
 'topbar'
 ).style.display='flex';
 
-}
+await cargarUsuarios();
+await cargarPrestamos();
 
-/* RECUPERAR */
-
-async function recuperarClave(){
-
-const correo =
-document.getElementById(
-'correo'
-).value;
-
-if(!correo){
-
-alert(
-'Ingrese su correo'
-);
-
-return;
-
-}
-
-const { error } =
-await supabaseClient.auth.resetPasswordForEmail(
-correo,
-{
-redirectTo:
-window.location.origin
-}
-);
-
-if(error){
-
-alert(
-'No se pudo enviar el correo'
-);
-
-return;
-
-}
-
-alert(
-'Revisa tu correo para cambiar contraseña'
+mostrarToast(
+'Bienvenido bibliotecario'
 );
 
 }
@@ -906,7 +990,44 @@ usuarios = data || [];
 
 }
 
+function mostrarUsuariosVisitante(){
+
+const lista =
+document.getElementById(
+'listaBusqueda'
+);
+
+lista.innerHTML='';
+
+usuarios.forEach((u,index)=>{
+
+lista.innerHTML += `
+
+<div
+class="usuario-item"
+onclick="mostrarUsuario(${index})">
+
+${u.nombre}
+
+</div>
+
+`;
+
+});
+
+}
+
 async function guardarUsuario(){
+
+if(modoVisitante){
+
+mostrarToast(
+'Solo bibliotecario puede registrar'
+);
+
+return;
+
+}
 
 const nombre =
 document.getElementById(
@@ -925,7 +1046,10 @@ document.getElementById(
 
 if(!nombre || !identidad || !etapa){
 
-alert('Complete todos los datos');
+mostrarToast(
+'Complete todos los datos'
+);
+
 return;
 
 }
@@ -941,18 +1065,31 @@ etapa
 
 if(error){
 
-alert('Error al guardar');
+mostrarToast(
+'Error al guardar'
+);
+
 return;
 
 }
 
-document.getElementById('nombre').value='';
-document.getElementById('identidad').value='';
-document.getElementById('etapa').value='';
+document.getElementById(
+'nombre'
+).value='';
+
+document.getElementById(
+'identidad'
+).value='';
+
+document.getElementById(
+'etapa'
+).value='';
 
 await cargarUsuarios();
 
-alert('Usuario guardado');
+mostrarToast(
+'Usuario guardado correctamente'
+);
 
 }
 
@@ -1083,22 +1220,16 @@ ${filas}
 async function eliminarUsuario(id){
 
 const confirmar =
-confirm('¿Eliminar usuario?');
+confirm(
+'¿Eliminar usuario?'
+);
 
 if(!confirmar) return;
 
-const { error } =
 await supabaseClient
 .from('usuarios')
 .delete()
 .eq('id',id);
-
-if(error){
-
-alert('No se pudo eliminar');
-return;
-
-}
 
 await cargarUsuarios();
 
@@ -1106,14 +1237,18 @@ document.getElementById(
 'informacionUsuario'
 ).innerHTML='';
 
-alert('Usuario eliminado');
+mostrarToast(
+'Usuario eliminado'
+);
 
 }
 
 async function editarUsuario(id){
 
 const usuario =
-usuarios.find(u=>u.id===id);
+usuarios.find(
+u => u.id === id
+);
 
 const nombre =
 prompt(
@@ -1135,7 +1270,6 @@ prompt(
 usuario.etapa
 );
 
-const { error } =
 await supabaseClient
 .from('usuarios')
 .update({
@@ -1145,16 +1279,11 @@ etapa
 })
 .eq('id',id);
 
-if(error){
-
-alert('Error al editar');
-return;
-
-}
-
 await cargarUsuarios();
 
-alert('Usuario actualizado');
+mostrarToast(
+'Usuario actualizado'
+);
 
 }
 
@@ -1177,16 +1306,24 @@ renderPrestamos();
 async function registrarPrestamo(){
 
 const codigo =
-document.getElementById('codigo').value;
+document.getElementById(
+'codigo'
+).value;
 
 const libro =
-document.getElementById('libro').value;
+document.getElementById(
+'libro'
+).value;
 
 const usuario =
-document.getElementById('usuarioPrestamo').value;
+document.getElementById(
+'usuarioPrestamo'
+).value;
 
 const fecha =
-document.getElementById('fecha').value;
+document.getElementById(
+'fecha'
+).value;
 
 if(
 !codigo ||
@@ -1195,12 +1332,14 @@ if(
 !fecha
 ){
 
-alert('Complete los datos');
+mostrarToast(
+'Complete todos los datos'
+);
+
 return;
 
 }
 
-const { error } =
 await supabaseClient
 .from('prestamos')
 .insert([{
@@ -1208,26 +1347,19 @@ codigo,
 libro,
 usuario,
 fecha_devolucion:fecha,
-estado:'Prestado',
-dias_retraso:0
+estado:'Prestado'
 }]);
-
-if(error){
-
-alert('Error al guardar préstamo');
-return;
-
-}
 
 await cargarPrestamos();
 
-alert('Préstamo registrado');
+mostrarToast(
+'Préstamo registrado'
+);
 
 }
 
 async function devolverLibro(id){
 
-const { error } =
 await supabaseClient
 .from('prestamos')
 .update({
@@ -1235,16 +1367,11 @@ estado:'Devuelto'
 })
 .eq('id',id);
 
-if(error){
-
-alert('Error al devolver');
-return;
-
-}
-
 await cargarPrestamos();
 
-alert('Libro devuelto');
+mostrarToast(
+'Libro devuelto'
+);
 
 }
 
@@ -1258,13 +1385,18 @@ document.getElementById(
 let html='';
 
 prestamos
-.filter(p=>p.estado !== 'Devuelto')
+.filter(
+p => p.estado !== 'Devuelto'
+)
 .forEach(p=>{
 
-const hoy = new Date();
+const hoy =
+new Date();
 
 const fecha =
-new Date(p.fecha_devolucion);
+new Date(
+p.fecha_devolucion
+);
 
 let dias = 0;
 
@@ -1283,20 +1415,15 @@ html += `
 <tr>
 
 <td>${p.codigo}</td>
-
 <td>${p.libro}</td>
-
 <td>${p.usuario}</td>
-
 <td>${p.fecha_devolucion}</td>
 
 <td>
-${dias>0?'Vencido':'Por vencer'}
+${dias > 0 ? 'Vencido' : 'Por vencer'}
 </td>
 
-<td>
-${dias}
-</td>
+<td>${dias}</td>
 
 <td>
 
@@ -1322,13 +1449,15 @@ tabla.innerHTML = html;
 
 /* CERRAR */
 
-function cerrarSesion(){
+async function cerrarSesion(){
+
+await supabaseClient.auth.signOut();
 
 location.reload();
 
 }
 
-/* INICIO */
+/* ONLOAD */
 
 window.onload = async function(){
 
@@ -1336,6 +1465,8 @@ document
 .querySelector('.sidebar')
 .classList
 .add('oculto');
+
+await verificarSesion();
 
 await cargarUsuarios();
 await cargarPrestamos();
