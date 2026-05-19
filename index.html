@@ -21,6 +21,7 @@ body{
 font-family:'Segoe UI',sans-serif;
 background:#eef3f8;
 color:#222;
+overflow-x:hidden;
 }
 
 /* MENU BUTTON */
@@ -185,6 +186,12 @@ padding-left:42px;
 margin-left:0;
 padding:45px;
 transition:0.3s;
+width:100%;
+}
+
+.content.expandido{
+margin-left:290px;
+width:calc(100% - 290px);
 }
 
 .card{
@@ -298,6 +305,17 @@ margin-top:15px;
 
 .info-biblioteca li{
 margin-bottom:12px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.content.expandido{
+margin-left:0;
+width:100%;
+}
+
 }
 
 </style>
@@ -576,10 +594,15 @@ let modoVisitante = false;
 
 function toggleMenu(){
 
-document
-.querySelector('.sidebar')
-.classList
-.toggle('oculto');
+const sidebar =
+document.querySelector('.sidebar');
+
+const content =
+document.querySelector('.content');
+
+sidebar.classList.toggle('oculto');
+
+content.classList.toggle('expandido');
 
 }
 
