@@ -86,7 +86,9 @@ margin-bottom:15px;
 color:#004f77;
 }
 
-input,select,button{
+input,
+select,
+button{
 width:100%;
 padding:12px;
 margin-top:10px;
@@ -104,6 +106,16 @@ cursor:pointer;
 
 button:hover{
 background:#004f77;
+}
+
+.btn-editar{
+background:#ff9800;
+margin-top:10px;
+}
+
+.btn-eliminar{
+background:#c62828;
+margin-top:10px;
 }
 
 .btn-devolver{
@@ -184,7 +196,10 @@ margin-top:20px;
 
 <div class="header">
 
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<div class="menu-btn"
+onclick="toggleMenu()">
+☰
+</div>
 
 <h1>
 Biblioteca Padre Juan Tajack
@@ -198,7 +213,8 @@ Seminario Mayor Nuestra Señora de Suyapa
 
 <div class="main">
 
-<div class="sidebar" id="sidebar">
+<div class="sidebar"
+id="sidebar">
 
 <div class="menu-item"
 onclick="mostrarPanel('inicio')">
@@ -228,11 +244,13 @@ class="panel active">
 Registro de Usuario
 </h2>
 
-<input type="text"
+<input
+type="text"
 id="nombre"
 placeholder="Nombre completo">
 
-<input type="text"
+<input
+type="text"
 id="identidad"
 placeholder="Número de identidad">
 
@@ -252,8 +270,11 @@ Discipular
 
 </select>
 
-<button onclick="guardarUsuario()">
+<button
+onclick="guardarUsuario()">
+
 Guardar Usuario
+
 </button>
 
 </div>
@@ -294,11 +315,13 @@ class="panel">
 Nuevo Préstamo
 </h2>
 
-<input type="text"
+<input
+type="text"
 id="codigo"
 placeholder="Código préstamo">
 
-<input type="text"
+<input
+type="text"
 id="libro"
 placeholder="Nombre libro">
 
@@ -321,7 +344,9 @@ id="usuarioPrestamo"
 
 <label
 style="display:block;margin-top:10px;">
+
 Fecha devolución
+
 </label>
 
 <input
@@ -331,7 +356,9 @@ id="fechaDevolucion"
 
 <button
 onclick="registrarPrestamo()">
+
 Registrar Préstamo
+
 </button>
 
 </div>
@@ -723,21 +750,20 @@ if(p.estado !== 'Devuelto'){
 let clase='estado-normal';
 
 if(p.estado==='Por vencer'){
-
 clase='estado-alerta';
-
 }
 
 if(p.estado==='Vencido'){
-
 clase='estado-vencido';
-
 }
 
 tabla.innerHTML += `
 <tr class="${clase}">
+
 <td>${p.codigo}</td>
+
 <td>${p.libro}</td>
+
 <td>${p.usuario}</td>
 
 <td>${p.fecha_devolucion}</td>
@@ -789,9 +815,23 @@ return;
 
 }
 
-alert('Libro devuelto');
+prestamos = prestamos.map(function(p){
 
-await cargarPrestamos();
+if(p.id === id){
+
+p.estado = 'Devuelto';
+
+}
+
+return p;
+
+});
+
+mostrarPrestamos();
+
+mostrarInformacionUsuario();
+
+alert('Libro devuelto');
 
 }
 
@@ -802,7 +842,9 @@ document.getElementById('listaUsuarios').value;
 
 if(index === ''){
 
-document.getElementById('informacionUsuario').innerHTML='';
+document.getElementById(
+'informacionUsuario'
+).innerHTML='';
 
 return;
 
@@ -834,12 +876,28 @@ ${usuario.identidad}
 ${usuario.etapa}
 </p>
 
+<button
+class="btn-editar"
+onclick="editarUsuario(${index})">
+
+Editar Usuario
+
+</button>
+
+<button
+class="btn-eliminar"
+onclick="eliminarUsuario(${index})">
+
+Eliminar Usuario
+
+</button>
+
 </div>
 `;
 
 html += `
 <h3 style="margin-top:20px;">
-Historial
+Historial de préstamos
 </h3>
 
 <table>
@@ -847,7 +905,7 @@ Historial
 <tr>
 
 <th>Libro</th>
-<th>Fecha</th>
+<th>Fecha devolución</th>
 <th>Estado</th>
 
 </tr>
@@ -857,9 +915,13 @@ historial.forEach(function(h){
 
 html += `
 <tr>
+
 <td>${h.libro}</td>
+
 <td>${h.fecha_devolucion}</td>
+
 <td>${h.estado}</td>
+
 </tr>
 `;
 
@@ -867,8 +929,108 @@ html += `
 
 html += `</table>`;
 
-document.getElementById('informacionUsuario').innerHTML =
-html;
+document.getElementById(
+'informacionUsuario'
+).innerHTML = html;
+
+}
+
+async function editarUsuario(index){
+
+let usuario = usuarios[index];
+
+let nuevoNombre =
+prompt(
+'Editar nombre',
+usuario.nombre
+);
+
+let nuevaIdentidad =
+prompt(
+'Editar identidad',
+usuario.identidad
+);
+
+let nuevaEtapa =
+prompt(
+'Editar etapa',
+usuario.etapa
+);
+
+if(
+!nuevoNombre ||
+!nuevaIdentidad ||
+!nuevaEtapa
+){
+
+return;
+
+}
+
+const { error } =
+await supabaseClient
+.from('usuarios')
+.update({
+nombre:nuevoNombre,
+identidad:nuevaIdentidad,
+etapa:nuevaEtapa
+})
+.eq('id',usuario.id);
+
+if(error){
+
+console.log(error);
+
+alert('Error');
+
+return;
+
+}
+
+alert('Usuario actualizado');
+
+await cargarUsuarios();
+
+mostrarInformacionUsuario();
+
+}
+
+async function eliminarUsuario(index){
+
+let confirmar =
+confirm('¿Eliminar usuario?');
+
+if(!confirmar){
+
+return;
+
+}
+
+let usuario = usuarios[index];
+
+const { error } =
+await supabaseClient
+.from('usuarios')
+.delete()
+.eq('id',usuario.id);
+
+if(error){
+
+console.log(error);
+
+alert('Error');
+
+return;
+
+}
+
+alert('Usuario eliminado');
+
+await cargarUsuarios();
+
+document.getElementById(
+'informacionUsuario'
+).innerHTML='';
 
 }
 
