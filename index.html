@@ -42,16 +42,6 @@ font-size:30px;
 cursor:pointer;
 }
 
-.logo{
-width:90px;
-height:90px;
-object-fit:contain;
-background:white;
-border-radius:50%;
-padding:8px;
-margin-bottom:10px;
-}
-
 .main{
 display:flex;
 }
@@ -72,7 +62,6 @@ color:white;
 padding:18px;
 border-bottom:1px solid rgba(255,255,255,0.1);
 cursor:pointer;
-font-size:18px;
 }
 
 .menu-item:hover{
@@ -97,15 +86,12 @@ margin-bottom:15px;
 color:#004f77;
 }
 
-input,
-select,
-button{
+input,select,button{
 width:100%;
 padding:12px;
 margin-top:10px;
 border-radius:6px;
 border:1px solid #ccc;
-font-size:16px;
 }
 
 button{
@@ -200,11 +186,6 @@ margin-top:20px;
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<img
-src="https://i.imgur.com/5qH8Y7A.png"
-class="logo"
->
-
 <h1>
 Biblioteca Padre Juan Tajack
 </h1>
@@ -288,23 +269,17 @@ class="panel">
 Usuarios Registrados
 </h2>
 
-<table>
+<select
+id="listaUsuarios"
+onchange="mostrarInformacionUsuario()">
 
-<thead>
+<option value="">
+Seleccione usuario
+</option>
 
-<tr>
+</select>
 
-<th>Nombre</th>
-<th>Identidad</th>
-<th>Etapa</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tablaUsuarios"></tbody>
-
-</table>
+<div id="informacionUsuario"></div>
 
 </div>
 
@@ -548,20 +523,18 @@ return;
 
 usuarios = data;
 
-let tabla =
-document.getElementById('tablaUsuarios');
+let lista =
+document.getElementById('listaUsuarios');
 
-tabla.innerHTML='';
+lista.innerHTML =
+'<option value="">Seleccione usuario</option>';
 
-usuarios.forEach(function(usuario){
+usuarios.forEach(function(usuario,index){
 
-tabla.innerHTML += `
-<tr>
-<td>${usuario.nombre}</td>
-<td>${usuario.identidad}</td>
-<td>${usuario.etapa}</td>
-</tr>
-`;
+lista.innerHTML +=
+'<option value="'+index+'">'+
+usuario.nombre+
+'</option>';
 
 });
 
@@ -745,6 +718,8 @@ tabla.innerHTML='';
 
 prestamos.forEach(function(p){
 
+if(p.estado !== 'Devuelto'){
+
 let clase='estado-normal';
 
 if(p.estado==='Por vencer'){
@@ -764,13 +739,136 @@ tabla.innerHTML += `
 <td>${p.codigo}</td>
 <td>${p.libro}</td>
 <td>${p.usuario}</td>
+
 <td>${p.fecha_devolucion}</td>
-<td>${p.estado}</td>
+
+<td>
+
+${p.estado}
+
+<br>
+
+<button
+class="btn-devolver"
+onclick="devolverLibro(${p.id})">
+
+Devolver
+
+</button>
+
+</td>
+
 <td>${p.dias_retraso}</td>
+
+</tr>
+`;
+
+}
+
+});
+
+}
+
+async function devolverLibro(id){
+
+const { error } =
+await supabaseClient
+.from('prestamos')
+.update({
+estado:'Devuelto'
+})
+.eq('id',id);
+
+if(error){
+
+console.log(error);
+
+alert('Error');
+
+return;
+
+}
+
+alert('Libro devuelto');
+
+await cargarPrestamos();
+
+}
+
+function mostrarInformacionUsuario(){
+
+let index =
+document.getElementById('listaUsuarios').value;
+
+if(index === ''){
+
+document.getElementById('informacionUsuario').innerHTML='';
+
+return;
+
+}
+
+let usuario = usuarios[index];
+
+let historial =
+prestamos.filter(function(p){
+
+return p.usuario === usuario.nombre;
+
+});
+
+let html='';
+
+html += `
+<div class="info-usuario">
+
+<h3>${usuario.nombre}</h3>
+
+<p>
+<strong>Identidad:</strong>
+${usuario.identidad}
+</p>
+
+<p>
+<strong>Etapa:</strong>
+${usuario.etapa}
+</p>
+
+</div>
+`;
+
+html += `
+<h3 style="margin-top:20px;">
+Historial
+</h3>
+
+<table>
+
+<tr>
+
+<th>Libro</th>
+<th>Fecha</th>
+<th>Estado</th>
+
+</tr>
+`;
+
+historial.forEach(function(h){
+
+html += `
+<tr>
+<td>${h.libro}</td>
+<td>${h.fecha_devolucion}</td>
+<td>${h.estado}</td>
 </tr>
 `;
 
 });
+
+html += `</table>`;
+
+document.getElementById('informacionUsuario').innerHTML =
+html;
 
 }
 
