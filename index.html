@@ -26,6 +26,25 @@ font-family:Arial,sans-serif;
 background:#f2f4f8;
 }
 
+/* LOGIN */
+
+#loginBox{
+max-width:400px;
+margin:60px auto;
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 15px rgba(0,0,0,0.15);
+}
+
+#loginBox h2{
+text-align:center;
+margin-bottom:20px;
+color:#004f77;
+}
+
+/* HEADER */
+
 .header{
 background:linear-gradient(90deg,#001f3f,#004f77);
 color:white;
@@ -41,6 +60,8 @@ top:20px;
 font-size:30px;
 cursor:pointer;
 }
+
+/* MAIN */
 
 .main{
 display:flex;
@@ -86,6 +107,8 @@ margin-bottom:15px;
 color:#004f77;
 }
 
+/* INPUTS */
+
 input,
 select,
 button{
@@ -94,6 +117,7 @@ padding:12px;
 margin-top:10px;
 border-radius:6px;
 border:1px solid #ccc;
+font-size:15px;
 }
 
 button{
@@ -110,18 +134,18 @@ background:#004f77;
 
 .btn-editar{
 background:#ff9800;
-margin-top:10px;
 }
 
 .btn-eliminar{
 background:#c62828;
-margin-top:10px;
 }
 
 .btn-devolver{
 background:#2e7d32;
 margin-top:10px;
 }
+
+/* TABLAS */
 
 table{
 width:100%;
@@ -141,6 +165,8 @@ padding:10px;
 text-align:center;
 }
 
+/* PANELES */
+
 .panel{
 display:none;
 }
@@ -148,6 +174,8 @@ display:none;
 .panel.active{
 display:block;
 }
+
+/* BUSCADOR */
 
 .lista-busqueda{
 border:1px solid #ccc;
@@ -169,6 +197,8 @@ border-bottom:1px solid #eee;
 background:#eef7ff;
 }
 
+/* ESTADOS */
+
 .estado-normal{
 background:#d6e8ff;
 }
@@ -180,6 +210,8 @@ background:#fff0b3;
 .estado-vencido{
 background:#ffd6d6;
 }
+
+/* INFO */
 
 .info-usuario{
 background:#eef7ff;
@@ -193,6 +225,42 @@ margin-top:20px;
 </head>
 
 <body>
+
+<!-- LOGIN -->
+
+<div id="loginBox">
+
+<h2>
+Biblioteca SMNSS
+</h2>
+
+<input
+type="email"
+id="correo"
+placeholder="Correo bibliotecario">
+
+<input
+type="password"
+id="clave"
+placeholder="Contraseña">
+
+<button onclick="loginBibliotecario()">
+Entrar como Bibliotecario
+</button>
+
+<button
+style="background:#555;"
+onclick="entrarVisitante()">
+
+Entrar como Visitante
+
+</button>
+
+</div>
+
+<!-- SISTEMA -->
+
+<div id="sistema" style="display:none;">
 
 <div class="header">
 
@@ -234,6 +302,8 @@ Préstamos
 </div>
 
 <div class="content">
+
+<!-- INICIO -->
 
 <div id="inicio"
 class="panel active">
@@ -281,6 +351,8 @@ Guardar Usuario
 
 </div>
 
+<!-- USUARIOS -->
+
 <div id="usuarios"
 class="panel">
 
@@ -305,6 +377,8 @@ Seleccione usuario
 </div>
 
 </div>
+
+<!-- PRESTAMOS -->
 
 <div id="prestamos"
 class="panel">
@@ -398,7 +472,11 @@ Libros Prestados
 
 </div>
 
+</div>
+
 <script>
+
+/* SUPABASE */
 
 const supabaseUrl =
 'https://wizrwignblrgkhyvtlyl.supabase.co';
@@ -412,9 +490,80 @@ supabaseUrl,
 supabaseKey
 );
 
+/* VARIABLES */
+
 let usuarios = [];
 
 let prestamos = [];
+
+let modoVisitante = false;
+
+/* LOGIN */
+
+async function loginBibliotecario(){
+
+let correo =
+document.getElementById('correo').value;
+
+let clave =
+document.getElementById('clave').value;
+
+const { error } =
+await supabaseClient.auth.signInWithPassword({
+
+email:correo,
+password:clave
+
+});
+
+if(error){
+
+alert('Credenciales incorrectas');
+
+return;
+
+}
+
+document.getElementById('loginBox').style.display='none';
+
+document.getElementById('sistema').style.display='block';
+
+}
+
+function entrarVisitante(){
+
+modoVisitante = true;
+
+document.getElementById('loginBox').style.display='none';
+
+document.getElementById('sistema').style.display='block';
+
+/* OCULTAR BOTONES */
+
+setTimeout(function(){
+
+document.querySelectorAll('button')
+.forEach(function(btn){
+
+if(
+btn.innerText.includes('Guardar') ||
+btn.innerText.includes('Registrar') ||
+btn.innerText.includes('Editar') ||
+btn.innerText.includes('Eliminar') ||
+btn.innerText.includes('Devolver')
+){
+
+btn.style.display='none';
+
+}
+
+});
+
+},500);
+
+}
+
+/* INICIO */
 
 window.onload = async function(){
 
@@ -425,6 +574,8 @@ await cargarUsuarios();
 await cargarPrestamos();
 
 };
+
+/* MENU */
 
 function toggleMenu(){
 
@@ -453,6 +604,8 @@ document
 
 }
 
+/* FECHA */
+
 function colocarFecha(){
 
 let fecha = new Date();
@@ -478,7 +631,13 @@ document
 
 }
 
+/* GUARDAR USUARIO */
+
 async function guardarUsuario(){
+
+if(modoVisitante){
+return;
+}
 
 let nombre =
 document.getElementById('nombre').value;
@@ -532,6 +691,8 @@ await cargarUsuarios();
 
 }
 
+/* CARGAR USUARIOS */
+
 async function cargarUsuarios(){
 
 const { data , error } =
@@ -566,6 +727,8 @@ usuario.nombre+
 });
 
 }
+
+/* BUSCAR */
 
 function filtrarUsuarios(){
 
@@ -624,7 +787,13 @@ document.getElementById('listaBusqueda').style.display =
 
 }
 
+/* PRESTAMOS */
+
 async function registrarPrestamo(){
+
+if(modoVisitante){
+return;
+}
 
 let codigo =
 document.getElementById('codigo').value;
@@ -736,6 +905,8 @@ mostrarPrestamos();
 
 }
 
+/* MOSTRAR PRESTAMOS */
+
 function mostrarPrestamos(){
 
 let tabla =
@@ -795,7 +966,13 @@ Devolver
 
 }
 
+/* DEVOLVER */
+
 async function devolverLibro(id){
+
+if(modoVisitante){
+return;
+}
 
 const { error } =
 await supabaseClient
@@ -834,6 +1011,8 @@ mostrarInformacionUsuario();
 alert('Libro devuelto');
 
 }
+
+/* INFO USUARIO */
 
 function mostrarInformacionUsuario(){
 
@@ -876,6 +1055,12 @@ ${usuario.identidad}
 ${usuario.etapa}
 </p>
 
+`;
+
+if(!modoVisitante){
+
+html += `
+
 <button
 class="btn-editar"
 onclick="editarUsuario(${index})">
@@ -892,8 +1077,11 @@ Eliminar Usuario
 
 </button>
 
-</div>
 `;
+
+}
+
+html += `</div>`;
 
 html += `
 <h3 style="margin-top:20px;">
@@ -935,7 +1123,13 @@ document.getElementById(
 
 }
 
+/* EDITAR */
+
 async function editarUsuario(index){
+
+if(modoVisitante){
+return;
+}
 
 let usuario = usuarios[index];
 
@@ -995,7 +1189,13 @@ mostrarInformacionUsuario();
 
 }
 
+/* ELIMINAR */
+
 async function eliminarUsuario(index){
+
+if(modoVisitante){
+return;
+}
 
 let confirmar =
 confirm('¿Eliminar usuario?');
