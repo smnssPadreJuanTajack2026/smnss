@@ -1,416 +1,374 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biblioteca Padre Juan Tajack</title>
+
+<title>Biblioteca SMNSS</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
 body{
-font-family:Arial,sans-serif;
-background:#f2f4f8;
-}
-
-#loginBox{
-max-width:420px;
-margin:70px auto;
-background:white;
-padding:40px;
-border-radius:18px;
-box-shadow:0 0 20px rgba(0,0,0,0.1);
-}
-
-#loginBox h2{
-text-align:center;
-margin-bottom:25px;
-font-size:34px;
-color:#003b5c;
-}
-
-#loginBox p{
-text-align:center;
-color:#666;
-margin-bottom:25px;
-line-height:1.8;
-}
-
-.header{
-background:linear-gradient(90deg,#001f3f,#004f77);
-color:white;
-padding:20px;
-text-align:center;
-position:relative;
-}
-
-.menu-btn{
-position:absolute;
-left:20px;
-top:20px;
-font-size:32px;
-cursor:pointer;
-}
-
-.main{
-display:flex;
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#eef1f5;
 }
 
 .sidebar{
-width:230px;
-background:#012b46;
-min-height:100vh;
-transition:0.3s;
+position:fixed;
+left:0;
+top:0;
+width:260px;
+height:100%;
+background:#002b45;
+color:white;
 }
 
-.sidebar.oculto{
-margin-left:-230px;
+.logo{
+padding:25px;
+font-size:20px;
+font-weight:bold;
+border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
 .menu-item{
-color:white;
-padding:18px;
-border-bottom:1px solid rgba(255,255,255,0.1);
+padding:22px;
 cursor:pointer;
-font-size:17px;
+border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
 .menu-item:hover{
-background:#014d7a;
+background:#003b5c;
 }
 
 .content{
-flex:1;
-padding:25px;
+margin-left:260px;
+padding:30px;
 }
 
 .card{
 background:white;
-padding:25px;
+padding:30px;
 border-radius:15px;
-box-shadow:0 0 12px rgba(0,0,0,0.08);
-margin-bottom:25px;
-}
-
-.card h2{
-margin-bottom:18px;
-color:#004f77;
+box-shadow:0 0 10px rgba(0,0,0,0.08);
+margin-bottom:30px;
 }
 
 input,
-select,
+select{
+width:100%;
+padding:18px;
+margin-top:12px;
+margin-bottom:20px;
+border:1px solid #ccc;
+border-radius:10px;
+font-size:16px;
+box-sizing:border-box;
+}
+
 button{
 width:100%;
-padding:13px;
-margin-top:12px;
-border-radius:8px;
-border:1px solid #ccc;
-font-size:15px;
-}
-
-button{
-background:#006b9f;
-color:white;
+padding:16px;
 border:none;
+border-radius:10px;
+font-size:18px;
 font-weight:bold;
 cursor:pointer;
+color:white;
 }
 
-button:hover{
-background:#004f77;
+.btn-azul{
+background:#004d73;
 }
 
-.btn-editar{
-background:#ff9800;
+.btn-verde{
+background:#2e8b34;
 }
 
-.btn-eliminar{
-background:#c62828;
+.btn-rojo{
+background:#cc2020;
+margin-top:10px;
 }
 
-.btn-devolver{
-background:#2e7d32;
+.btn-naranja{
+background:#f39c12;
 margin-top:10px;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
+margin-top:20px;
 }
 
-table th{
-background:#004f77;
+th{
+background:#004d73;
 color:white;
-padding:12px;
+padding:16px;
 }
 
-table td{
+td{
+padding:16px;
 border:1px solid #ddd;
-padding:10px;
 text-align:center;
-}
-
-.panel{
-display:none;
-}
-
-.panel.active{
-display:block;
-}
-
-.lista-busqueda{
-border:1px solid #ccc;
 background:white;
-border-radius:8px;
-max-height:180px;
-overflow-y:auto;
-display:none;
+}
+
+.usuario-item{
+background:#f1f1f1;
+padding:15px;
 margin-top:5px;
-}
-
-.item-usuario{
-padding:12px;
+border-radius:8px;
 cursor:pointer;
-border-bottom:1px solid #eee;
 }
 
-.item-usuario:hover{
-background:#eef7ff;
+.usuario-item:hover{
+background:#ddd;
 }
 
-.estado-normal{
-background:#d6e8ff;
-}
-
-.estado-alerta{
-background:#fff0b3;
-}
-
-.estado-vencido{
-background:#ffd6d6;
-}
-
-.info-usuario{
-background:#eef7ff;
-padding:20px;
+.usuario-box{
+background:#f7f7f7;
+padding:25px;
 border-radius:12px;
 margin-top:20px;
 }
 
+#loginBox{
+max-width:500px;
+margin:auto;
+margin-top:120px;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div id="loginBox">
+<div id="loginBox" class="card">
 
-<h2>
-Biblioteca SMNSS
-</h2>
+<h1>Biblioteca SMNSS</h1>
 
-<p>
-Sistema de consulta y administración bibliotecaria.
-</p>
+<select id="tipoIngreso">
 
-<input
-type="email"
-id="correo"
-placeholder="Correo bibliotecario">
+<option value="bibliotecario">
+Bibliotecario
+</option>
+
+<option value="visitante">
+Visitante
+</option>
+
+</select>
 
 <input
 type="password"
 id="clave"
-placeholder="Contraseña">
-
-<button onclick="loginBibliotecario()">
-Entrar como Bibliotecario
-</button>
+placeholder="Contraseña bibliotecario">
 
 <button
-style="background:#555;"
-onclick="entrarVisitante()">
+class="btn-azul"
+onclick="ingresarSistema()">
 
-Entrar como Visitante
+Ingresar
 
 </button>
 
 </div>
 
-<div id="sistema" style="display:none;">
+<div
+id="sistema"
+style="display:none;">
 
-<div class="header">
+<div class="sidebar">
 
-<div class="menu-btn"
-onclick="toggleMenu()">
-☰
-</div>
+<div class="logo">
 
-<h1>
-Biblioteca Padre Juan Tajack
-</h1>
-
-<h3>
-Seminario Mayor Nuestra Señora de Suyapa
-</h3>
+Biblioteca SMNSS
 
 </div>
 
-<div class="main">
+<div
+class="menu-item"
+onclick="mostrar('inicio')">
 
-<div class="sidebar" id="sidebar">
-
-<div class="menu-item"
-onclick="mostrarPanel('inicio')">
 Inicio
+
 </div>
 
-<div class="menu-item"
-onclick="mostrarPanel('usuarios')">
+<div
+class="menu-item"
+onclick="mostrar('usuarios')">
+
 Usuarios
+
 </div>
 
-<div class="menu-item"
-onclick="mostrarPanel('prestamos')">
+<div
+class="menu-item"
+id="prestamosMenu"
+onclick="mostrar('prestamos')">
+
 Préstamos
+
 </div>
 
 </div>
 
 <div class="content">
 
-<div id="inicio"
-class="panel active">
+<div id="inicio">
 
 <div class="card">
 
-<h2>
-Registro de Usuario
-</h2>
+<h1>
 
-<input
-type="text"
-id="nombre"
-placeholder="Nombre completo">
+Biblioteca SMNSS
 
-<input
-type="text"
-id="identidad"
-placeholder="Número de identidad">
+</h1>
 
-<select id="etapa">
+<p>
 
-<option value="">
-Seleccione etapa
-</option>
+Sistema de biblioteca del
+Seminario Mayor Nuestra Señora de Suyapa.
 
-<option value="Configuradora">
-Configuradora
-</option>
-
-<option value="Discipular">
-Discipular
-</option>
-
-</select>
-
-<button onclick="guardarUsuario()">
-Guardar Usuario
-</button>
+</p>
 
 </div>
 
 </div>
-
-<div id="usuarios"
-class="panel">
-
-<div class="card">
-
-<h2>
-Buscar Usuario
-</h2>
-
-<input
-type="text"
-id="buscarUsuarioHistorial"
-placeholder="Buscar usuario"
-onkeyup="buscarUsuarioHistorial()">
 
 <div
-class="lista-busqueda"
-id="listaBusquedaHistorial">
-</div>
-
-<div id="informacionUsuario"></div>
-
-</div>
-
-</div>
-
-<div id="prestamos"
-class="panel">
+id="usuarios"
+style="display:none;">
 
 <div class="card">
 
-<h2>
-Nuevo Préstamo
-</h2>
+<h1>
 
-<input
-type="text"
-id="codigo"
-placeholder="Código préstamo">
+Buscar Usuario
 
-<input
-type="text"
-id="libro"
-placeholder="Nombre libro">
+</h1>
 
 <input
 type="text"
 id="buscarUsuario"
 placeholder="Buscar usuario"
-onkeyup="filtrarUsuarios()">
+onkeyup="buscarUsuarios()">
 
-<div
-class="lista-busqueda"
-id="listaBusqueda">
+<div id="listaBusqueda"></div>
+
+<div id="informacionUsuario"></div>
+
 </div>
 
-<input
-type="hidden"
-id="usuarioPrestamo">
+<div
+class="card"
+id="registroUsuarios">
 
-<label style="display:block;margin-top:10px;">
+<h1>
+
+Registro de Usuario
+
+</h1>
+
+<input
+type="text"
+id="nombre"
+placeholder="Nombre">
+
+<input
+type="text"
+id="identidad"
+placeholder="Identidad">
+
+<select id="etapa">
+
+<option>
+Configuradora
+</option>
+
+<option>
+Discipulado
+</option>
+
+<option>
+Teología
+</option>
+
+</select>
+
+<button
+class="btn-azul"
+onclick="guardarUsuario()">
+
+Guardar Usuario
+
+</button>
+
+</div>
+
+</div>
+
+<div
+id="prestamos"
+style="display:none;">
+
+<div class="card">
+
+<h1>
+
+Nuevo Préstamo
+
+</h1>
+
+<input
+type="text"
+id="codigo"
+placeholder="Código">
+
+<input
+type="text"
+id="libro"
+placeholder="Libro">
+
+<input
+type="text"
+id="usuarioPrestamo"
+placeholder="Usuario">
+
+<label>
+
 Fecha devolución
+
 </label>
 
 <input
 type="date"
-id="fechaDevolucion">
+id="fecha">
 
-<button onclick="registrarPrestamo()">
+<button
+class="btn-azul"
+onclick="registrarPrestamo()">
+
 Registrar Préstamo
+
 </button>
 
 </div>
 
 <div class="card">
 
-<h2>
+<h1>
+
 Libros Prestados
-</h2>
+
+</h1>
 
 <table>
-
-<thead>
 
 <tr>
 
@@ -420,10 +378,9 @@ Libros Prestados
 <th>Fecha devolución</th>
 <th>Estado</th>
 <th>Días retraso</th>
+<th>Acción</th>
 
 </tr>
-
-</thead>
 
 <tbody id="tablaPrestamos"></tbody>
 
@@ -437,238 +394,145 @@ Libros Prestados
 
 </div>
 
-</div>
-
 <script>
 
-const supabaseUrl =
-'https://wizrwignblrgkhyvtlyl.supabase.co';
+const SUPABASE_URL = "TU_URL_SUPABASE";
+const SUPABASE_KEY = "TU_SUPABASE_KEY";
 
-const supabaseKey =
-'sb_publishable_vkuYb7CtsMeKuJwKn0J8rA_q-m3hvwQ';
-
-const supabaseClient =
-window.supabase.createClient(
-supabaseUrl,
-supabaseKey
+const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 let usuarios = [];
 let prestamos = [];
 let modoVisitante = false;
 
-async function loginBibliotecario(){
+/* LOGIN */
 
-let correo =
-document.getElementById('correo').value;
+function ingresarSistema(){
 
-let clave =
-document.getElementById('clave').value;
+const tipo =
+document.getElementById(
+'tipoIngreso'
+).value;
 
-const { error } =
-await supabaseClient.auth.signInWithPassword({
+if(tipo === 'visitante'){
 
-email:correo,
-password:clave
-
-});
-
-if(error){
-
-alert('Credenciales incorrectas');
+entrarVisitante();
 
 return;
 
 }
 
-document.getElementById('loginBox').style.display='none';
+const clave =
+document.getElementById(
+'clave'
+).value;
 
-document.getElementById('sistema').style.display='block';
+if(clave !== 'Biblioteca2026*'){
+
+alert('Contraseña incorrecta');
+
+return;
 
 }
+
+document.getElementById(
+'loginBox'
+).style.display='none';
+
+document.getElementById(
+'sistema'
+).style.display='block';
+
+}
+
+/* VISITANTE */
 
 function entrarVisitante(){
 
 modoVisitante = true;
 
-document.getElementById('loginBox').style.display='none';
+document.getElementById(
+'loginBox'
+).style.display='none';
 
-document.getElementById('sistema').style.display='block';
+document.getElementById(
+'sistema'
+).style.display='block';
 
-document.querySelectorAll('.menu-item')
-.forEach(function(item){
+document.getElementById(
+'prestamosMenu'
+).style.display='none';
 
-if(item.innerText.includes('Préstamos')){
+document.getElementById(
+'registroUsuarios'
+).style.display='none';
 
-item.style.display='none';
+document.getElementById(
+'inicio'
+).innerHTML = `
 
-}
+<div class="card">
 
-});
-
-setTimeout(function(){
-
-document.querySelectorAll('button')
-.forEach(function(btn){
-
-if(
-btn.innerText.includes('Guardar') ||
-btn.innerText.includes('Registrar') ||
-btn.innerText.includes('Editar') ||
-btn.innerText.includes('Eliminar') ||
-btn.innerText.includes('Devolver')
-){
-
-btn.style.display='none';
-
-}
-
-});
-
-},500);
-
-document.getElementById('inicio').innerHTML = `
-
-<div style="
-max-width:1000px;
-margin:auto;
-">
-
-<div style="
-background:white;
-padding:40px;
-border-radius:18px;
-box-shadow:0 0 15px rgba(0,0,0,0.08);
-">
-
-<h1 style="
-color:#003b5c;
-font-size:42px;
-margin-bottom:10px;
-font-weight:bold;
-">
+<h1>
 
 Biblioteca SMNSS
 
 </h1>
 
-<p style="
-font-size:18px;
-color:#666;
-margin-bottom:35px;
-">
+<p>
 
-Seminario Mayor Nuestra Señora de Suyapa
+Bienvenido al sistema de consulta de la
+Biblioteca Padre Juan Tajack.
 
 </p>
 
-<hr style="
-margin-bottom:35px;
-border:none;
-border-top:1px solid #ddd;
-">
+<h2>
 
-<h2 style="
-color:#003b5c;
-margin-bottom:18px;
-font-size:28px;
-">
-
-Presentación
+Qué es una biblioteca
 
 </h2>
 
-<p style="
-line-height:2;
-font-size:17px;
-color:#444;
-text-align:justify;
-">
+<p>
 
-La Biblioteca Padre Juan Tajack es un espacio
-académico destinado al estudio, investigación y
-formación intelectual de la comunidad del Seminario.
-
-Los usuarios pueden consultar material relacionado
-principalmente con Filosofía, Teología y formación
-humana.
+La biblioteca es un espacio académico
+destinado al estudio, investigación,
+lectura y formación intelectual.
 
 </p>
 
-<h2 style="
-color:#003b5c;
-margin-top:40px;
-margin-bottom:20px;
-font-size:28px;
-">
+<h2>
 
 Secciones
 
 </h2>
 
-<div style="
-line-height:2.2;
-font-size:17px;
-color:#444;
-">
+<ul>
 
-<p>
-<strong>Recepción:</strong>
-Área de información y préstamos.
-</p>
+<li>Recepción y préstamos</li>
+<li>Sala de revistas</li>
+<li>Sala de libros</li>
+<li>Libros de Filosofía</li>
+<li>Libros de Teología</li>
 
-<p>
-<strong>Sala de Revistas:</strong>
-Consulta de revistas y publicaciones.
-</p>
+</ul>
 
-<p>
-<strong>Sala de Libros:</strong>
-Libros de Filosofía, Teología y formación.
-</p>
+<h2>
 
-<p>
-<strong>Consulta de Historial:</strong>
-Verificación de préstamos y devoluciones.
-</p>
-
-</div>
-
-<h2 style="
-color:#003b5c;
-margin-top:40px;
-margin-bottom:20px;
-font-size:28px;
-">
-
-Reglamento
+Reglas
 
 </h2>
 
-<div style="
-background:#f8f9fb;
-padding:25px;
-border-radius:12px;
-line-height:2.2;
-font-size:17px;
-color:#444;
-">
+<ul>
 
-<p>• Todo libro debe devolverse en la fecha indicada.</p>
+<li>Guardar silencio y orden</li>
+<li>No dañar libros</li>
+<li>Devolver libros a tiempo</li>
+<li>Multa de L. 5 diarios por retraso</li>
 
-<p>• La multa por retraso es de L. 5 diarios.</p>
-
-<p>• Debe mantenerse el silencio y el orden.</p>
-
-<p>• No se permite dañar libros.</p>
-
-<p>• Todo préstamo queda registrado.</p>
-
-<p>• Cada usuario puede consultar su historial personal.</p>
-
-</div>
-
-</div>
+</ul>
 
 </div>
 
@@ -676,495 +540,213 @@ color:#444;
 
 }
 
-window.onload = async function(){
+/* MOSTRAR */
 
-colocarFecha();
+function mostrar(id){
 
-await cargarUsuarios();
+document.getElementById(
+'inicio'
+).style.display='none';
 
-await cargarPrestamos();
+document.getElementById(
+'usuarios'
+).style.display='none';
 
-};
+document.getElementById(
+'prestamos'
+).style.display='none';
 
-function toggleMenu(){
-
-document
-.getElementById('sidebar')
-.classList
-.toggle('oculto');
-
-}
-
-function mostrarPanel(id){
-
-let paneles =
-document.querySelectorAll('.panel');
-
-paneles.forEach(function(p){
-
-p.classList.remove('active');
-
-});
-
-document
-.getElementById(id)
-.classList
-.add('active');
+document.getElementById(
+id
+).style.display='block';
 
 }
 
-function colocarFecha(){
-
-let fecha = new Date();
-
-fecha.setDate(fecha.getDate()+15);
-
-let year = fecha.getFullYear();
-
-let month =
-String(fecha.getMonth()+1)
-.padStart(2,'0');
-
-let day =
-String(fecha.getDate())
-.padStart(2,'0');
-
-let fechaFinal =
-year+'-'+month+'-'+day;
-
-document.getElementById('fechaDevolucion').value =
-fechaFinal;
-
-}
-
-async function guardarUsuario(){
-
-if(modoVisitante){
-return;
-}
-
-let nombre =
-document.getElementById('nombre').value;
-
-let identidad =
-document.getElementById('identidad').value;
-
-let etapa =
-document.getElementById('etapa').value;
-
-if(
-nombre==='' ||
-identidad==='' ||
-etapa===''
-){
-
-alert('Complete todos los campos');
-
-return;
-
-}
-
-const { error } =
-await supabaseClient
-.from('usuarios')
-.insert([
-{
-nombre:nombre,
-identidad:identidad,
-etapa:etapa
-}
-]);
-
-if(error){
-
-alert('Error');
-
-return;
-
-}
-
-alert('Usuario guardado');
-
-document.getElementById('nombre').value='';
-document.getElementById('identidad').value='';
-document.getElementById('etapa').value='';
-
-await cargarUsuarios();
-
-}
+/* CARGAR */
 
 async function cargarUsuarios(){
 
-const { data } =
-await supabaseClient
+const { data } = await supabaseClient
 .from('usuarios')
 .select('*')
-.order('id');
+.order('nombre');
 
 usuarios = data || [];
 
 }
 
-function filtrarUsuarios(){
-
-let texto =
-document
-.getElementById('buscarUsuario')
-.value
-.toLowerCase();
-
-let lista =
-document.getElementById('listaBusqueda');
-
-lista.innerHTML='';
-
-if(texto===''){
-
-lista.style.display='none';
-
-return;
-
-}
-
-usuarios.forEach(function(usuario,index){
-
-if(
-usuario.nombre
-.toLowerCase()
-.includes(texto)
-){
-
-lista.innerHTML +=
-'<div class="item-usuario" onclick="seleccionarUsuario('+index+')">'+
-usuario.nombre+
-'</div>';
-
-}
-
-});
-
-lista.style.display='block';
-
-}
-
-function seleccionarUsuario(index){
-
-document.getElementById('buscarUsuario').value =
-usuarios[index].nombre;
-
-document.getElementById('usuarioPrestamo').value =
-usuarios[index].nombre;
-
-document.getElementById('listaBusqueda').style.display =
-'none';
-
-}
-
-async function registrarPrestamo(){
-
-if(modoVisitante){
-return;
-}
-
-let codigo =
-document.getElementById('codigo').value;
-
-let libro =
-document.getElementById('libro').value;
-
-let usuario =
-document.getElementById('usuarioPrestamo').value;
-
-let fecha =
-document.getElementById('fechaDevolucion').value;
-
-if(
-codigo==='' ||
-libro==='' ||
-usuario==='' ||
-fecha===''
-){
-
-alert('Complete todos los campos');
-
-return;
-
-}
-
-const { error } =
-await supabaseClient
-.from('prestamos')
-.insert([
-{
-codigo:codigo,
-libro:libro,
-usuario:usuario,
-fecha_devolucion:fecha,
-estado:'Prestado',
-dias_retraso:0
-}
-]);
-
-if(error){
-
-alert('Error');
-
-return;
-
-}
-
-alert('Préstamo registrado');
-
-document.getElementById('codigo').value='';
-document.getElementById('libro').value='';
-document.getElementById('buscarUsuario').value='';
-document.getElementById('usuarioPrestamo').value='';
-
-await cargarPrestamos();
-
-}
-
 async function cargarPrestamos(){
 
-const { data } =
-await supabaseClient
+const { data } = await supabaseClient
 .from('prestamos')
 .select('*')
-.order('id');
+.order('id',{ascending:false});
 
 prestamos = data || [];
 
-mostrarPrestamos();
+renderPrestamos();
 
 }
 
-function mostrarPrestamos(){
+/* GUARDAR USUARIO */
 
-let tabla =
-document.getElementById('tablaPrestamos');
+async function guardarUsuario(){
 
-tabla.innerHTML='';
+const nombre =
+document.getElementById(
+'nombre'
+).value;
 
-prestamos.forEach(function(p){
+const identidad =
+document.getElementById(
+'identidad'
+).value;
 
-if(p.estado !== 'Devuelto'){
+const etapa =
+document.getElementById(
+'etapa'
+).value;
 
-let clase='estado-normal';
-
-let fechaHoy = new Date();
-
-let fechaDev = new Date(p.fecha_devolucion);
-
-let diferencia =
-Math.ceil(
-(fechaDev-fechaHoy)/
-(1000*60*60*24)
-);
-
-let estado='En tiempo';
-
-let retraso=0;
-
-if(diferencia<=3){
-
-estado='Por vencer';
-clase='estado-alerta';
-
-}
-
-if(diferencia<0){
-
-estado='Vencido';
-clase='estado-vencido';
-retraso=Math.abs(diferencia);
-
-}
-
-tabla.innerHTML += `
-<tr class="${clase}">
-
-<td>${p.codigo}</td>
-
-<td>${p.libro}</td>
-
-<td>${p.usuario}</td>
-
-<td>${p.fecha_devolucion}</td>
-
-<td>
-
-${estado}
-
-<br>
-
-<button
-class="btn-devolver"
-onclick="devolverLibro(${p.id})">
-
-Devolver
-
-</button>
-
-</td>
-
-<td>${retraso}</td>
-
-</tr>
-`;
-
-}
-
-});
-
-}
-
-async function devolverLibro(id){
-
-if(modoVisitante){
-return;
-}
-
-const { error } =
-await supabaseClient
-.from('prestamos')
-.update({
-estado:'Devuelto'
-})
-.eq('id',id);
+const { error } = await supabaseClient
+.from('usuarios')
+.insert([{
+nombre,
+identidad,
+etapa
+}]);
 
 if(error){
 
-console.log(error);
-
-alert('Error al devolver');
+alert('Error al guardar');
 
 return;
 
 }
 
-await cargarPrestamos();
+await cargarUsuarios();
 
-document.getElementById(
-'informacionUsuario'
-).innerHTML='';
-
-alert('Libro devuelto');
+alert('Usuario guardado');
 
 }
 
-function buscarUsuarioHistorial(){
+/* BUSCAR */
 
-let texto =
-document
-.getElementById('buscarUsuarioHistorial')
-.value
-.toLowerCase();
+function buscarUsuarios(){
 
-let lista =
+const texto =
 document.getElementById(
-'listaBusquedaHistorial'
+'buscarUsuario'
+).value.toLowerCase();
+
+const lista =
+document.getElementById(
+'listaBusqueda'
 );
 
 lista.innerHTML='';
 
-if(texto===''){
-
-lista.style.display='none';
-
-return;
-
-}
-
-usuarios.forEach(function(usuario,index){
-
-if(
-usuario.nombre
-.toLowerCase()
+usuarios
+.filter(u =>
+u.nombre.toLowerCase()
 .includes(texto)
-){
+)
+.forEach((u,index)=>{
 
-lista.innerHTML +=
-'<div class="item-usuario" onclick="mostrarUsuarioDirecto('+index+')">'+
-usuario.nombre+
-'</div>';
+lista.innerHTML += `
 
-}
+<div
+class="usuario-item"
+onclick="mostrarUsuario(${index})">
 
-});
+${u.nombre}
 
-lista.style.display='block';
+</div>
 
-}
-
-function mostrarUsuarioDirecto(index){
-
-document.getElementById(
-'listaBusquedaHistorial'
-).style.display='none';
-
-mostrarInformacionUsuario(index);
-
-}
-
-function mostrarInformacionUsuario(index){
-
-let usuario = usuarios[index];
-
-let historial =
-prestamos.filter(function(p){
-
-return p.usuario===usuario.nombre;
-
-});
-
-let html='';
-
-html += `
-<div class="info-usuario">
-
-<h3>${usuario.nombre}</h3>
-
-<p>
-<strong>Identidad:</strong>
-${usuario.identidad}
-</p>
-
-<p>
-<strong>Etapa:</strong>
-${usuario.etapa}
-</p>
 `;
 
-if(!modoVisitante){
+});
 
-html += `
+}
+
+/* MOSTRAR USUARIO */
+
+function mostrarUsuario(index){
+
+const usuario = usuarios[index];
+
+const historial =
+prestamos.filter(
+p => p.usuario === usuario.nombre
+);
+
+let filas='';
+
+historial.forEach(h=>{
+
+filas += `
+
+<tr>
+
+<td>${h.libro}</td>
+<td>${h.estado}</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById(
+'informacionUsuario'
+).innerHTML = `
+
+<div class="usuario-box">
+
+<h2>
+
+${usuario.nombre}
+
+</h2>
+
+<p>
+
+<b>Identidad:</b>
+${usuario.identidad}
+
+</p>
+
+<p>
+
+<b>Etapa:</b>
+${usuario.etapa}
+
+</p>
+
+${modoVisitante ? '' : `
 
 <button
-class="btn-editar"
-onclick="editarUsuario(${index})">
+class="btn-naranja"
+onclick="editarUsuario(${usuario.id})">
 
 Editar Usuario
 
 </button>
 
 <button
-class="btn-eliminar"
-onclick="eliminarUsuario(${index})">
+class="btn-rojo"
+onclick="eliminarUsuario(${usuario.id})">
 
 Eliminar Usuario
 
 </button>
 
-`;
+`}
 
-}
+<h2>
 
-html += `</div>`;
-
-html += `
-<h3 style="margin-top:20px;">
 Historial de préstamos
-</h3>
+
+</h2>
 
 <table>
 
@@ -1174,116 +756,34 @@ Historial de préstamos
 <th>Estado</th>
 
 </tr>
+
+${filas}
+
+</table>
+
+</div>
+
 `;
 
-historial.forEach(function(h){
-
-html += `
-<tr>
-
-<td>${h.libro}</td>
-
-<td>${h.estado}</td>
-
-</tr>
-`;
-
-});
-
-html += `</table>`;
-
-document.getElementById(
-'informacionUsuario'
-).innerHTML = html;
-
 }
 
-async function editarUsuario(index){
+/* ELIMINAR */
 
-if(modoVisitante){
-return;
-}
+async function eliminarUsuario(id){
 
-let usuario = usuarios[index];
-
-let nuevoNombre =
-prompt(
-'Editar nombre',
-usuario.nombre
-);
-
-let nuevaIdentidad =
-prompt(
-'Editar identidad',
-usuario.identidad
-);
-
-let nuevaEtapa =
-prompt(
-'Editar etapa',
-usuario.etapa
-);
-
-if(
-!nuevoNombre ||
-!nuevaIdentidad ||
-!nuevaEtapa
-){
-return;
-}
-
-const { error } =
-await supabaseClient
-.from('usuarios')
-.update({
-nombre:nuevoNombre,
-identidad:nuevaIdentidad,
-etapa:nuevaEtapa
-})
-.eq('id',usuario.id);
-
-if(error){
-
-alert('Error');
-
-return;
-
-}
-
-alert('Usuario actualizado');
-
-await cargarUsuarios();
-
-mostrarInformacionUsuario(index);
-
-}
-
-async function eliminarUsuario(index){
-
-if(modoVisitante){
-return;
-}
-
-let confirmar =
+const confirmar =
 confirm('¿Eliminar usuario?');
 
-if(!confirmar){
-return;
-}
+if(!confirmar) return;
 
-let usuario = usuarios[index];
-
-const { error } =
-await supabaseClient
+const { error } = await supabaseClient
 .from('usuarios')
 .delete()
-.eq('id',usuario.id);
+.eq('id',id);
 
 if(error){
 
-console.log(error);
-
-alert('Error al eliminar');
+alert('No se pudo eliminar');
 
 return;
 
@@ -1298,6 +798,218 @@ document.getElementById(
 alert('Usuario eliminado');
 
 }
+
+/* EDITAR */
+
+async function editarUsuario(id){
+
+const usuario =
+usuarios.find(u=>u.id===id);
+
+const nombre =
+prompt(
+'Nuevo nombre',
+usuario.nombre
+);
+
+if(!nombre) return;
+
+const identidad =
+prompt(
+'Nueva identidad',
+usuario.identidad
+);
+
+const etapa =
+prompt(
+'Nueva etapa',
+usuario.etapa
+);
+
+const { error } = await supabaseClient
+.from('usuarios')
+.update({
+nombre,
+identidad,
+etapa
+})
+.eq('id',id);
+
+if(error){
+
+alert('Error al editar');
+
+return;
+
+}
+
+await cargarUsuarios();
+
+alert('Usuario actualizado');
+
+}
+
+/* REGISTRAR PRESTAMO */
+
+async function registrarPrestamo(){
+
+const codigo =
+document.getElementById(
+'codigo'
+).value;
+
+const libro =
+document.getElementById(
+'libro'
+).value;
+
+const usuario =
+document.getElementById(
+'usuarioPrestamo'
+).value;
+
+const fecha =
+document.getElementById(
+'fecha'
+).value;
+
+const { error } = await supabaseClient
+.from('prestamos')
+.insert([{
+codigo,
+libro,
+usuario,
+fecha_devolucion:fecha,
+estado:'Prestado',
+dias_retraso:0
+}]);
+
+if(error){
+
+alert('Error al guardar préstamo');
+
+return;
+
+}
+
+await cargarPrestamos();
+
+alert('Préstamo registrado');
+
+}
+
+/* DEVOLVER */
+
+async function devolverLibro(id){
+
+const { error } = await supabaseClient
+.from('prestamos')
+.update({
+estado:'Devuelto'
+})
+.eq('id',id);
+
+if(error){
+
+alert('Error al devolver');
+
+return;
+
+}
+
+await cargarPrestamos();
+
+alert('Libro devuelto');
+
+}
+
+/* RENDER PRESTAMOS */
+
+function renderPrestamos(){
+
+const tabla =
+document.getElementById(
+'tablaPrestamos'
+);
+
+let html='';
+
+prestamos
+.filter(p=>p.estado !== 'Devuelto')
+.forEach(p=>{
+
+const hoy = new Date();
+
+const fecha =
+new Date(p.fecha_devolucion);
+
+let dias = 0;
+
+if(hoy > fecha){
+
+dias = Math.floor(
+(hoy - fecha)
+/
+(1000*60*60*24)
+);
+
+}
+
+html += `
+
+<tr>
+
+<td>${p.codigo}</td>
+
+<td>${p.libro}</td>
+
+<td>${p.usuario}</td>
+
+<td>${p.fecha_devolucion}</td>
+
+<td>
+
+${dias>0?'Vencido':'Por vencer'}
+
+</td>
+
+<td>
+
+${dias}
+
+</td>
+
+<td>
+
+<button
+class="btn-verde"
+onclick="devolverLibro(${p.id})">
+
+Devolver
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+tabla.innerHTML = html;
+
+}
+
+/* INICIO */
+
+window.onload = async function(){
+
+await cargarUsuarios();
+
+await cargarPrestamos();
+
+};
 
 </script>
 
