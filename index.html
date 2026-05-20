@@ -1007,6 +1007,8 @@ Identidad: ${usuario.identidad}
 Etapa: ${usuario.etapa}
 </div>
 
+${tipoSeleccionado === 'visitante' ? '' : `
+
 <button
 class="btn-naranja"
 onclick="editarUsuario(${usuario.id})">
@@ -1022,6 +1024,8 @@ onclick="eliminarUsuario(${usuario.id})">
 Eliminar Usuario
 
 </button>
+
+`}
 
 <h2 style="margin-top:25px;margin-bottom:15px;color:#003b5c;">
 Historial de préstamos
