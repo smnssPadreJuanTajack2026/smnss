@@ -64,7 +64,6 @@ color:white;
 .login-top h1{
 font-size:52px;
 font-weight:900;
-line-height:1.1;
 margin-bottom:15px;
 }
 
@@ -95,21 +94,20 @@ transition:0.3s;
 }
 
 .login-card:hover{
-transform:translateY(-3px);
 border:2px solid #005b8f;
 background:white;
+transform:translateY(-3px);
 }
 
 .login-card.active{
 border:2px solid #005b8f;
 background:white;
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
 }
 
 .login-card h2{
 font-size:28px;
-color:#002b45;
 font-weight:800;
+color:#002b45;
 }
 
 input,
@@ -146,6 +144,12 @@ background:#2e7d32;
 
 .btn-rojo{
 background:#c62828;
+margin-top:12px;
+}
+
+.btn-naranja{
+background:#f39c12;
+margin-top:12px;
 }
 
 .topbar{
@@ -214,7 +218,6 @@ line-height:1.3;
 margin-top:12px;
 font-size:14px;
 line-height:1.7;
-opacity:0.9;
 }
 
 .menu-item{
@@ -233,7 +236,6 @@ background:rgba(255,255,255,0.08);
 margin-top:100px;
 padding:35px;
 margin-left:300px;
-transition:0.3s;
 width:calc(100% - 300px);
 }
 
@@ -250,13 +252,11 @@ font-size:50px;
 font-weight:900;
 color:#002b45;
 margin-bottom:20px;
-line-height:1.1;
 }
 
 .card p{
 font-size:18px;
 line-height:1.9;
-color:#444;
 }
 
 .info-grid{
@@ -277,7 +277,6 @@ border-left:7px solid #005b8f;
 font-size:28px;
 margin-bottom:18px;
 color:#003b5c;
-font-weight:900;
 }
 
 .info-list{
@@ -288,7 +287,6 @@ margin-top:15px;
 .info-list li{
 margin-bottom:15px;
 font-size:18px;
-line-height:1.8;
 }
 
 .usuario-item{
@@ -298,7 +296,6 @@ margin-top:10px;
 border-radius:14px;
 cursor:pointer;
 font-weight:700;
-transition:0.3s;
 }
 
 .usuario-item:hover{
@@ -323,7 +320,6 @@ margin-bottom:20px;
 .usuario-detalle{
 font-size:18px;
 margin-bottom:12px;
-line-height:1.8;
 }
 
 table{
@@ -348,26 +344,22 @@ border-bottom:1px solid #eee;
 .estado-vencido{
 background:#ffebee;
 color:#c62828;
-font-weight:800;
 padding:8px 12px;
 border-radius:10px;
+font-weight:800;
 }
 
 .estado-normal{
 background:#e8f5e9;
 color:#2e7d32;
-font-weight:800;
 padding:8px 12px;
 border-radius:10px;
+font-weight:800;
 }
 
 .retraso{
-color:#c62828;
 font-weight:900;
-}
-
-#listaUsuariosPrestamo{
-margin-bottom:20px;
+color:#c62828;
 }
 
 .usuario-prestamo{
@@ -377,7 +369,6 @@ border-radius:12px;
 margin-bottom:8px;
 cursor:pointer;
 font-weight:700;
-transition:0.3s;
 }
 
 .usuario-prestamo:hover{
@@ -397,14 +388,6 @@ left:-300px;
 .content{
 margin-left:0;
 width:100%;
-}
-
-.card h1{
-font-size:38px;
-}
-
-.topbar-title{
-font-size:22px;
 }
 
 }
@@ -532,22 +515,10 @@ Biblioteca Padre Juan Tajack
 </h1>
 
 <p>
-La Biblioteca Padre Juan Tajack es un espacio académico destinado al estudio, investigación y formación intelectual de los seminaristas y visitantes del Seminario Mayor Nuestra Señora de Suyapa.
+La Biblioteca Padre Juan Tajack es un espacio académico destinado al estudio, investigación y formación intelectual.
 </p>
 
 <div class="info-grid">
-
-<div class="info-box">
-
-<h3>
-¿Qué es una biblioteca?
-</h3>
-
-<p>
-La biblioteca es un espacio destinado a conservar, organizar y facilitar el acceso al conocimiento académico y espiritual mediante libros y materiales especializados.
-</p>
-
-</div>
 
 <div class="info-box">
 
@@ -557,11 +528,11 @@ Secciones
 
 <ul class="info-list">
 
-<li>Recepción e información</li>
-<li>Área de préstamos</li>
+<li>Recepción</li>
 <li>Sala de lectura</li>
-<li>Libros de Filosofía</li>
-<li>Libros de Teología</li>
+<li>Préstamos</li>
+<li>Filosofía</li>
+<li>Teología</li>
 
 </ul>
 
@@ -979,11 +950,8 @@ let historialHTML='';
 
 if(historial.length === 0){
 
-historialHTML = `
-<p>
-Este usuario no tiene préstamos registrados.
-</p>
-`;
+historialHTML =
+'<p>Este usuario no tiene préstamos registrados.</p>';
 
 }else{
 
@@ -1017,7 +985,7 @@ historialHTML += `
 
 });
 
-historialHTML += `</table>`;
+historialHTML += '</table>';
 
 }
 
@@ -1039,6 +1007,22 @@ Identidad: ${usuario.identidad}
 Etapa: ${usuario.etapa}
 </div>
 
+<button
+class="btn-naranja"
+onclick="editarUsuario(${usuario.id})">
+
+Editar Usuario
+
+</button>
+
+<button
+class="btn-rojo"
+onclick="eliminarUsuario(${usuario.id})">
+
+Eliminar Usuario
+
+</button>
+
 <h2 style="margin-top:25px;margin-bottom:15px;color:#003b5c;">
 Historial de préstamos
 </h2>
@@ -1048,6 +1032,74 @@ ${historialHTML}
 </div>
 
 `;
+
+}
+
+async function editarUsuario(id){
+
+const usuario =
+usuarios.find(
+u => u.id === id
+);
+
+const nombre =
+prompt(
+'Nuevo nombre',
+usuario.nombre
+);
+
+if(!nombre) return;
+
+const identidad =
+prompt(
+'Nueva identidad',
+usuario.identidad
+);
+
+const etapa =
+prompt(
+'Nueva etapa',
+usuario.etapa
+);
+
+await supabaseClient
+.from('usuarios')
+.update({
+nombre,
+identidad,
+etapa
+})
+.eq('id',id);
+
+await cargarUsuarios();
+
+mostrarUsuarios();
+
+mostrarToast('Usuario actualizado');
+
+}
+
+async function eliminarUsuario(id){
+
+const confirmar =
+confirm('¿Eliminar usuario?');
+
+if(!confirmar) return;
+
+await supabaseClient
+.from('usuarios')
+.delete()
+.eq('id',id);
+
+await cargarUsuarios();
+
+mostrarUsuarios();
+
+document.getElementById(
+'informacionUsuario'
+).innerHTML='';
+
+mostrarToast('Usuario eliminado');
 
 }
 
@@ -1221,26 +1273,19 @@ html += `
 <tr>
 
 <td>${p.codigo}</td>
-
 <td>${p.libro}</td>
-
 <td>${p.usuario}</td>
-
 <td>${p.fecha_devolucion}</td>
 
 <td>
 
 ${diasRetraso > 0 ?
 
-`<span class="estado-vencido">
-Vencido
-</span>`
+'<span class="estado-vencido">Vencido</span>'
 
 :
 
-`<span class="estado-normal">
-En tiempo
-</span>`
+'<span class="estado-normal">En tiempo</span>'
 
 }
 
