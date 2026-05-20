@@ -144,6 +144,10 @@ transform:translateY(-2px);
 background:#2e7d32;
 }
 
+.btn-rojo{
+background:#c62828;
+}
+
 .topbar{
 position:fixed;
 top:0;
@@ -341,6 +345,27 @@ background:white;
 border-bottom:1px solid #eee;
 }
 
+.estado-vencido{
+background:#ffebee;
+color:#c62828;
+font-weight:800;
+padding:8px 12px;
+border-radius:10px;
+}
+
+.estado-normal{
+background:#e8f5e9;
+color:#2e7d32;
+font-weight:800;
+padding:8px 12px;
+border-radius:10px;
+}
+
+.retraso{
+color:#c62828;
+font-weight:900;
+}
+
 #listaUsuariosPrestamo{
 margin-bottom:20px;
 }
@@ -496,7 +521,7 @@ Cerrar sesión
 
 </div>
 
-<div class="content" id="content">
+<div class="content">
 
 <div id="inicio">
 
@@ -670,6 +695,7 @@ Libros Prestados
 <th>Usuario</th>
 <th>Fecha devolución</th>
 <th>Estado</th>
+<th>Días retraso</th>
 <th>Acción</th>
 
 </tr>
@@ -723,16 +749,14 @@ function seleccionarIngreso(tipo){
 
 tipoSeleccionado = tipo;
 
-document
-.querySelectorAll('.login-card')
+document.querySelectorAll('.login-card')
 .forEach(card=>{
 card.classList.remove('active');
 });
 
 if(tipo === 'bibliotecario'){
 
-document
-.querySelectorAll('.login-card')[0]
+document.querySelectorAll('.login-card')[0]
 .classList.add('active');
 
 document.getElementById(
@@ -741,8 +765,7 @@ document.getElementById(
 
 }else{
 
-document
-.querySelectorAll('.login-card')[1]
+document.querySelectorAll('.login-card')[1]
 .classList.add('active');
 
 document.getElementById(
@@ -755,10 +778,10 @@ document.getElementById(
 
 function toggleMenu(){
 
-const sidebar =
-document.getElementById('sidebar');
-
-sidebar.classList.toggle('oculto');
+document
+.getElementById('sidebar')
+.classList
+.toggle('oculto');
 
 }
 
@@ -792,6 +815,7 @@ document.getElementById('sistema').style.display='block';
 document.getElementById('topbar').style.display='flex';
 
 await cargarUsuarios();
+await cargarPrestamos();
 
 mostrarUsuarios();
 
@@ -946,6 +970,57 @@ function seleccionarUsuario(index){
 
 const usuario = usuarios[index];
 
+const historial =
+prestamos.filter(
+p => p.usuario === usuario.nombre
+);
+
+let historialHTML='';
+
+if(historial.length === 0){
+
+historialHTML = `
+<p>
+Este usuario no tiene préstamos registrados.
+</p>
+`;
+
+}else{
+
+historialHTML = `
+
+<table>
+
+<tr>
+
+<th>Libro</th>
+<th>Estado</th>
+<th>Fecha devolución</th>
+
+</tr>
+
+`;
+
+historial.forEach(h=>{
+
+historialHTML += `
+
+<tr>
+
+<td>${h.libro}</td>
+<td>${h.estado}</td>
+<td>${h.fecha_devolucion}</td>
+
+</tr>
+
+`;
+
+});
+
+historialHTML += `</table>`;
+
+}
+
 document.getElementById(
 'informacionUsuario'
 ).innerHTML = `
@@ -963,6 +1038,12 @@ Identidad: ${usuario.identidad}
 <div class="usuario-detalle">
 Etapa: ${usuario.etapa}
 </div>
+
+<h2 style="margin-top:25px;margin-bottom:15px;color:#003b5c;">
+Historial de préstamos
+</h2>
+
+${historialHTML}
 
 </div>
 
@@ -1115,15 +1196,61 @@ p => p.estado !== 'Devuelto'
 )
 .forEach(p=>{
 
+const hoy =
+new Date();
+
+const fecha =
+new Date(
+p.fecha_devolucion
+);
+
+let diasRetraso = 0;
+
+if(hoy > fecha){
+
+diasRetraso = Math.floor(
+(hoy - fecha)
+/
+(1000*60*60*24)
+);
+
+}
+
 html += `
 
 <tr>
 
 <td>${p.codigo}</td>
+
 <td>${p.libro}</td>
+
 <td>${p.usuario}</td>
+
 <td>${p.fecha_devolucion}</td>
-<td>${p.estado}</td>
+
+<td>
+
+${diasRetraso > 0 ?
+
+`<span class="estado-vencido">
+Vencido
+</span>`
+
+:
+
+`<span class="estado-normal">
+En tiempo
+</span>`
+
+}
+
+</td>
+
+<td class="retraso">
+
+${diasRetraso > 0 ? diasRetraso + ' días' : '0'}
+
+</td>
 
 <td>
 
